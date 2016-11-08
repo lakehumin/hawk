@@ -27,11 +27,11 @@ public class DBUtils {
 	//数据库驱动  
 	private static String jdbcDriver = "com.mysql.jdbc.Driver";
 	//数据库url  
-    private static String dbUrl = "jdbc:mysql://114.212.118.115:3306/springmvc";
+    private static String dbUrl = "jdbc:mysql://114.212.118.115:3306/hawk";
     //数据库ip
 //    private static String dbIp = "114.212.118.115";
     //数据库名称
-//    private static String dbName = "springmvc";
+//    private static String dbName = "hawk";
     //数据库表名称
     private static String dbTableName = "user";
     //数据库用户名  
