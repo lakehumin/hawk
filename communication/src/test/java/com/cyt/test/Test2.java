@@ -15,7 +15,7 @@ public class Test2
 	        
 	    
 		SerialPortBean SPB=new SerialPortBean();
-		SPB.selectPort("COM3");
+		SPB.selectPort("COM8");
 		SPB.startRead(0);
 		/*
 		while(true)
@@ -36,17 +36,19 @@ public class Test2
 		//String msg="hello cjs!";
 		final Sim800AService s800service=new Sim800AService();
 		s800service.setSP(SPB);
-		
+		/*测试接受短信
 		Thread read_thread=new Thread()
 		{
 			public void run() {
-				s800service.Waiting_Read_Message();
+				s800service.Wait_For_Message();
 			}
 		};
 //		if (s800service.CheckAT()) {
 //			read_thread.start();
 //		}
 		read_thread.start();
+		*/
+		//测试短信发送功能
 		/*if(s800service.CheckAT())
 		{
 			if(s800service.SetSIM_Text_Work_Environment())
@@ -55,7 +57,14 @@ public class Test2
 			}
 		}
 		*/
-		
+		//c测试彩信设置功能
+		if (s800service.CheckAT()) 
+		{
+			if (s800service.Set_MMS_Environment()) 
+			{
+				System.out.println("测试成功！");
+			}
+		}
 		
 		//SPB.startReadingDataThread();
 		//String path= "C:\\Users\\cyt\\Desktop\\ico\\test2.png";
