@@ -1,0 +1,139 @@
+package com.lake.common_utils.db_utils;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.lake.common_utils.db_utils.SqlConnectionPool.SqlConnection;
+
+public class SqlHelper {
+
+	//最大连接数
+		private static int maxSize = 20;
+		//初始连接数
+		private static int initialSize = 3;
+		
+		//数据库驱动  
+		private static String jdbcDriver = "com.mysql.jdbc.Driver";
+		//数据库url  
+	    private static String dbUrl = "jdbc:mysql://114.212.118.115:3306/hawk";
+	    //数据库ip
+//	    private static String dbIp = "114.212.118.115";
+	    //数据库名称
+//	    private static String dbName = "hawk";
+	    //数据库表名称
+	    private static String dbTableName = "user";
+	    //数据库用户名  
+	    private static String dbUsername = "root";
+	    //数据库密码 
+	    private static String dbPassword = "root";
+	    //数据库连接池
+	    private static volatile SqlConnectionPool SqlConnectionPool;
+	    private static PreparedStatement ps=null;
+	    private static ResultSet rs=null;
+	    //prepareStatement sql语句预存储
+	    //private static Map<String,String> sqlMap;
+	    
+	    public static synchronized void init() {
+	    	if(checkInit()) {
+	    		System.err.println("SqlHelper初始化已完成");
+	    		return ;
+	    	}
+	    	SqlConnectionPool = new SqlConnectionPool(maxSize,initialSize,
+	    			jdbcDriver,dbUrl,dbUsername,dbPassword);
+	    	//initSqlMap();
+	    }
+
+		public static synchronized void init(String tableName) {
+	    	if(checkInit()) {
+	    		System.err.println("SqlHelper初始化已完成");
+	    		return ;
+	    	}
+	    	dbTableName = tableName;
+	    	init();
+	    }
+
+		public static synchronized void init(String dbName, 
+				String tableName) {
+	    	if(checkInit()) {
+	    		System.err.println("SqlHelper初始化已完成");
+	    		return ;
+	    	}
+	    	dbUrl = "jdbc:mysql://114.212.118.115:3306/" + dbName;
+	    	dbTableName = tableName;
+	    	init();
+	    }
+
+		public static synchronized void init(String ip, 
+				String dbName, String tableName) {
+			if(checkInit()) {
+	    		System.err.println("SqlHelper初始化已完成");
+	    		return ;
+	    	}
+			dbUrl = "jdbc:mysql://" + ip + ":3306/" + dbName;
+			dbTableName = tableName;
+			init();
+		}
+		
+		public static synchronized void init(String ip, String dbName, 
+				String tableName, int maxSize, int initialSize) {
+			if(checkInit()) {
+	    		System.err.println("SqlHelper初始化已完成");
+	    		return ;
+	    	}
+			dbUrl = "jdbc:mysql://" + ip + ":3306/" + dbName;
+			dbTableName = tableName;
+			SqlHelper.maxSize = maxSize;
+			SqlHelper.initialSize = initialSize;
+			init();
+		}
+		private static boolean checkInit() {
+			if(null != SqlConnectionPool) {
+	    		return true;
+	    	}
+			return false;
+		}
+	 public static void  add(String sql,Object[]parameters)
+	 {
+		SqlConnection sqlConnection=SqlConnectionPool.getConnection();
+		try {
+		        ps=sqlConnection.getConnection().prepareStatement(sql);
+			if (parameters!=null&&!parameters.equals(""))
+			{
+				for(int i=0;i<parameters.length;i++)
+				{
+					ps.setObject(i+1, parameters[i]);
+				}
+			}
+			ps.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+	 }
+	 public static void Update(String sql,String []parameters)
+	{
+		 SqlConnection sqlConnection=SqlConnectionPool.getConnection();
+		 try {
+			ps=sqlConnection.getConnection().prepareStatement(sql);
+			if (parameters!=null&&!parameters.equals(""))
+			{
+				for(int i=0;i<parameters.length;i++)
+				{
+					ps.setString(i+1, parameters[i]);
+				}
+			}
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+		 finally
+			{
+				//close(rs, ps, );
+			}
+		 
+	}
+		
+}
