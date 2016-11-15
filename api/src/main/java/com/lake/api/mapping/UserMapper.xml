@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lake.api.dao.UserDao" >
+  <select id="searchByName" resultType="com.lake.api.model.User">
+    select 
+    *
+    from user
+    where name = #{name}
+  </select>
+  <delete id="deleteByName">
+    delete from user
+    where name = #{name}
+  </delete>
+  <update id="update">
+    update user
+    set age = #{age},
+    date = #{date}
+    where name = #{name}
+  </update>
+  <insert id="insert" parameterType="com.lake.api.model.User" >
+    insert into user (id, name, age, 
+      date)
+    values (#{id}, #{name}, #{age}, 
+      #{date})
+  </insert>
+</mapper>
