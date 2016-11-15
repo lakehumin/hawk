@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="hawk">
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/common-utils/src/main/java"/>
-        <wb-resource deploy-path="/" source-path="/api/src/main/webapp"/>
-        <property name="context-root" value="hawk"/>
-        <property name="java-output-path" value="/hawk/bin"/>
-    </wb-module>
-</project-modules>
