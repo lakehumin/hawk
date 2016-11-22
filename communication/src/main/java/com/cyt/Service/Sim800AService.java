@@ -1,8 +1,9 @@
-package com.cyt.Sim800A;
+package com.cyt.Service;
 
 import java.io.File;
 
 import javax.imageio.stream.FileImageOutputStream;
+import javax.swing.Spring;
 
 import com.cyt.Bean.SerialPortBean;
 import com.lake.common_utils.stringutils.StringUtils;
@@ -307,7 +308,65 @@ public class Sim800AService
 		
 		return rec_MMS;
 	}
-	
+	//9、初始化sim GPRS服务
+	public boolean StartGPRS()
+	{
+		boolean b=false;
+		//1、测试网络注册情况  返回1,5都成功
+		String _atcreg="at+creg?\r";
+		String atcreg=StringUtils.str2hexstr(_atcreg);
+		SP.write(atcreg, "hex");
+		delay(delay);
+		if(SP.getRec_string().equals(atcreg+"0D0A2B435245473A20302C310D0A0D0A4F4B0D0A")||               //返回数据是1,5即可
+				SP.getRec_string().equals(atcreg+"0D0A2B435245473A20302C350D0A0D0A4F4B0D0A"))
+		{
+			System.out.println("网络已经注册成功！");
+			//2、 查询模块是否附着 GPRS 网络
+			String _atcgatt="at+cgatt?\r";
+			String atcgatt=StringUtils.str2hexstr(_atcgatt);
+			SP.write(atcgatt, "hex");
+			delay(delay);
+			if (SP.getRec_string().equals(atcgatt+"0D0A2B43474154543A20310D0A0D0A4F4B0D0A"))     //返回ok
+			{
+				System.out.println("成功附着GPRS网络");
+				//3、设置APN
+				String _atcstt="at+cstt\r";
+				String atcstt=StringUtils.str2hexstr(_atcstt);
+				SP.write(atcstt, "hex");
+				delay(delay);
+				if(SP.getRec_string().equals(atcstt+"0D0A4F4B0D0A"))              //返回ok
+				{
+					System.out.println("设置APN成功");
+					//4、激活移动场景
+					String _atciicr="at+ciicr\r";
+					String atciicr=StringUtils.str2hexstr(_atciicr);
+					SP.write(atciicr, "hex");
+					delay(delay);
+					if (SP.getRec_string().equals(atciicr+"0D0A4F4B0D0A"))                     //返回ok
+					{
+						System.out.println("移动场景已经激活！");
+						b=true;
+					}
+					else{
+						System.err.println("移动场景激活失败！");
+					}
+				}
+				else
+				{
+					System.err.println("设置APN失败，请重试！");
+				}
+			}
+			else {
+				System.err.println("模块未附着gprs网络，请重试！");
+			}
+			
+		}
+		else
+		{
+			System.err.println("网络未注册。。。请注册");
+		}
+		return b;
+	}
 	
 	//delay接收时延函数
 	public void delay(int m_s)
