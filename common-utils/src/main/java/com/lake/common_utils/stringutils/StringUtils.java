@@ -1,5 +1,5 @@
 package com.lake.common_utils.stringutils;
-
+import java.io.*;;
 /**
  * @author LakeHm
  *
@@ -14,6 +14,11 @@ public class StringUtils {
     
     public static boolean isNotEmpty(String s) {
     	return !isEmpty(s);
+    }
+   //string 转hexstring
+    public static String str2hexstr(String str)
+    { 
+    	return byte2string(str.getBytes());
     }
   //byte转string
   	 public  static String byte2string(byte[] data){
@@ -48,4 +53,20 @@ public class StringUtils {
   		    byte b = (byte) "0123456789ABCDEF".indexOf(c);   
   		    return b;   
   		}  
+  		//读取byte数组
+  		public static byte[] readBytes(InputStream in) throws IOException {  
+  	        BufferedInputStream bufin = new BufferedInputStream(in);  
+  	        int buffSize = 1024; 
+  	        ByteArrayOutputStream out = new ByteArrayOutputStream(buffSize);  
+  	        byte[] temp = new byte[buffSize];  
+  	        int size = bufin.read(temp);  
+  	        while (size!=-1) {  
+  	            out.write(temp, 0, size);
+  	            //size=bufin.read(temp);
+  	            break;
+  	        }  
+  	        //System.out.println("读取完毕！");
+  	        byte[] content = out.toByteArray();  
+  	        return content;  
+  	    }  
 }

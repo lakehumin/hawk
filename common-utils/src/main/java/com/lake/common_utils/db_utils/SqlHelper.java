@@ -30,6 +30,7 @@ public class SqlHelper {
 	    private static volatile SqlConnectionPool SqlConnectionPool;
 	    private static PreparedStatement ps=null;
 	    private static ResultSet rs=null;
+	    private static SqlConnection sqct=null;
 	    //prepareStatement sql语句预存储
 	    //private static Map<String,String> sqlMap;
 	    
@@ -92,11 +93,12 @@ public class SqlHelper {
 	    	}
 			return false;
 		}
-	 public static void  add(String sql,Object[]parameters)
+		//重载executeQuery函数
+	 public static ResultSet executeQuery(String sql,Object[]parameters)
 	 {
-		SqlConnection sqlConnection=SqlConnectionPool.getConnection();
+		 sqct=SqlConnectionPool.getConnection();
 		try {
-		        ps=sqlConnection.getConnection().prepareStatement(sql);
+		        ps=sqct.getConnection().prepareStatement(sql);
 			if (parameters!=null&&!parameters.equals(""))
 			{
 				for(int i=0;i<parameters.length;i++)
@@ -104,18 +106,20 @@ public class SqlHelper {
 					ps.setObject(i+1, parameters[i]);
 				}
 			}
-			ps.executeQuery();
+			rs=ps.executeQuery();
+			return rs;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}
 	 }
-	 public static void Update(String sql,String []parameters)
+	 //重载executeUpdate函数
+	 public static void executeUpdate(String sql,String []parameters)
 	{
-		 SqlConnection sqlConnection=SqlConnectionPool.getConnection();
+		 sqct=SqlConnectionPool.getConnection();
 		 try {
-			ps=sqlConnection.getConnection().prepareStatement(sql);
+			ps=sqct.getConnection().prepareStatement(sql);
 			if (parameters!=null&&!parameters.equals(""))
 			{
 				for(int i=0;i<parameters.length;i++)
@@ -131,9 +135,60 @@ public class SqlHelper {
 		}
 		 finally
 			{
-				//close(rs, ps, );
+				close(rs, ps,sqct.getConnection());
 			}
 		 
 	}
-		
+	 //关闭流
+	 public static void close(ResultSet rs,PreparedStatement ps,Connection ct)
+		{
+			if (rs!=null) 
+			{
+				try 
+				{
+					rs.close();
+				} catch ( SQLException e2) 
+				{
+					e2.printStackTrace();
+				}
+				rs=null;
+			}
+			if(ps!=null)
+			{
+				try 
+				{
+					ps.close();
+				} 
+				catch (SQLException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ps=null;
+			}
+			
+			if (ct!=null) 
+			{
+				try 
+				{
+					ct.close();
+				} 
+				catch (SQLException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ct=null;
+			}
+			
+			
+		}	
+	 public static SqlConnection getSqlConnection() 
+	 {
+		 return sqct;		
+	 }
+	 public static PreparedStatement getpPreparedStatement() 
+	 {
+		 return ps;		
+	 }
 }

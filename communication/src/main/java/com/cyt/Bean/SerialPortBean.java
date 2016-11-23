@@ -16,14 +16,14 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 		private String appName = "串口通讯测试";
 		private int timeout = 2000;//open 端口时的等待时间
 		private int threadTime = 0;
-		public boolean hasnew=false;		
+		private boolean hasnew=false;		
 		//private SendMessage SM=new SendMessage();
 		private CommPortIdentifier commPort;
 		private SerialPort serialPort;
 		private InputStream inputStream;
 		private OutputStream outputStream;
-		public String sign="";
-		public String rec_string="";
+		private String sign="";
+		private String rec_string="";
 		private byte[] rec_byte=null;
 		public byte[] getRec_byte() {
 			return rec_byte;
@@ -317,7 +317,7 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 			//System.out.println(rec_byte[i]+BUFFER.size());
 		}
 		rec_string=byte2string(rec_byte);
-		hasnew=true;
+		//hasnew=true;
 		System.out.println("转换成功！");
 		//System.out.println(rec_byte);
 		System.out.println("rec_string= "+rec_string);

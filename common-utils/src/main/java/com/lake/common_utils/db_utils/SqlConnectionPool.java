@@ -123,14 +123,11 @@ public class SqlConnectionPool {
 		private Connection connection;
 		private volatile boolean busy;
 		//private Map<String,PreparedStatement> pStatMap;
-		private static PreparedStatement ps=null;
-		private static ResultSet rs=null;
 		public SqlConnection(Connection connection) {
 			this.connection = connection;
 			busy = false;
 			//pStatMap = new HashMap<String,PreparedStatement>();
 		}
-
 		public Connection getConnection() {
 			return connection;
 		}
@@ -145,14 +142,6 @@ public class SqlConnectionPool {
 
 		public void setBusy(boolean busy) {
 			this.busy = busy;
-		}
-		public static ResultSet getResultSet()
-		{
-			return rs;
-		}
-		public static PreparedStatement getPreparedStatement()
-		{
-			return ps;
 		}
 		
 	}

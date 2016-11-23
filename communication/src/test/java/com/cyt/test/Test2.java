@@ -5,7 +5,7 @@ import java.io.File;
 import javax.imageio.stream.FileImageOutputStream;
 
 import com.cyt.Bean.SerialPortBean;
-import com.cyt.Sim800A.Sim800AService;
+import com.cyt.Service.Sim800AService;
 
 import java.io.*;
 
@@ -58,6 +58,7 @@ public class Test2
 		}
 		*/
 		//c测试彩信设置功能
+		/*
 		if (s800service.CheckAT()) 
 		{
 			if (s800service.Set_MMS_Environment()) 
@@ -65,7 +66,12 @@ public class Test2
 				System.out.println("测试成功！");
 			}
 		}
-		
+		*/
+		//测试gprs初始化设置
+		if(s800service.StartGPRS())
+		{
+			System.out.println("初始化 SUCCESS!");
+		}
 		//SPB.startReadingDataThread();
 		//String path= "C:\\Users\\cyt\\Desktop\\ico\\test2.png";
 //		while(true){
