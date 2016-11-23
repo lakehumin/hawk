@@ -5,22 +5,22 @@
     select 
     *
     from user
-    where name = #{name}
+    where username = #{username}
   </select>
   <delete id="deleteByName">
     delete from user
-    where name = #{name}
+    where username = #{username}
   </delete>
   <update id="update">
     update user
-    set age = #{age},
-    date = #{date}
-    where name = #{name}
+    set password = #{password},
+    type = #{type}
+    where username = #{username}
   </update>
   <insert id="insert" parameterType="com.lake.api.model.User" >
-    insert into user (id, name, age, 
-      date)
-    values (#{id}, #{name}, #{age}, 
-      #{date})
+    insert into user (id, username, password, 
+      type)
+    values (#{id}, #{username}, #{password}, 
+      #{type})
   </insert>
 </mapper>

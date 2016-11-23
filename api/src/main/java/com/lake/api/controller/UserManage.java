@@ -1,8 +1,6 @@
 package com.lake.api.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alibaba.fastjson.JSON;
 import com.lake.api.model.User;
 import com.lake.api.service.UserService;
 import com.lake.common_utils.web_utils.BaseWeb;
@@ -20,26 +17,25 @@ import com.lake.common_utils.web_utils.BaseWeb;
 /**
  * @author LakeHm
  *
- * 2016年11月15日下午2:39:47
+ * 2016年11月23日上午10:21:14
  */
 
 @Controller
-@RequestMapping("/db")
-public class TestDB extends BaseWeb{
-	private static final Logger log = Logger.getLogger(TestDB.class);
+@RequestMapping("/user")
+public class UserManage extends BaseWeb {
+	private static final Logger log = Logger.getLogger(UserManage.class);
 
 	@Resource
 	private UserService userService;
 	
 	@RequestMapping("/add")
     public void add(HttpServletRequest request,HttpServletResponse response) {  
-		String name = request.getParameter("name");
-		int age = Integer.parseInt(request.getParameter("age"));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
 		
 		User u = new User();
-		u.setAge(age);
-		u.setName(name);
-		u.setDate(new Timestamp(System.currentTimeMillis()));
+		u.setUsername(username);
+		u.setPassword(password);
 		userService.insert(u);
 		
 		try {
@@ -51,9 +47,9 @@ public class TestDB extends BaseWeb{
 	
 	@RequestMapping("/search")
     public void search(HttpServletRequest request,HttpServletResponse response) throws Exception{  
-		String name = request.getParameter("name");
+		String username = request.getParameter("username");
 		
-		User u = userService.getUserByName(name);
+		User u = userService.getUserByName(username);
 		try {
 			print(response, u);
 		} catch (IOException e) {
@@ -64,13 +60,12 @@ public class TestDB extends BaseWeb{
 	
 	@RequestMapping("/update")
     public void update(HttpServletRequest request,HttpServletResponse response) throws Exception{  
-		String name = request.getParameter("name");
-		int age = Integer.parseInt(request.getParameter("age"));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
 		
 		User u = new User();
-		u.setAge(age);
-		u.setName(name);
-		u.setDate(new Timestamp(System.currentTimeMillis()));
+		u.setUsername(username);
+		u.setPassword(password);
 		userService.update(u);
 		try {
 			print(response, u);
@@ -82,9 +77,9 @@ public class TestDB extends BaseWeb{
 	
 	@RequestMapping("/delete")
     public void delete(HttpServletRequest request,HttpServletResponse response) throws Exception{  
-		String name = request.getParameter("name");
+		String username = request.getParameter("username");
 		
-		userService.deleteByName(name);
+		userService.deleteByName(username);
 		log.warn("delete");
 		try {
 			print(response, "success");

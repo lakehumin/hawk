@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 public class BaseWeb {
 
 	public void print(HttpServletResponse response, Object o) throws IOException {
+		response.setHeader("Access-Control-Allow-Origin", "*");		//解决跨域问题
 		PrintWriter pw = response.getWriter();
 		pw.write(JSON.toJSONString(o));
 	}

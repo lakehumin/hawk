@@ -1,7 +1,5 @@
 package com.lake.api.model;
 
-import java.sql.Timestamp;
-
 /**
  * @author LakeHm
  *
@@ -9,31 +7,31 @@ import java.sql.Timestamp;
  */
 public class User {
 	private int id;
-	private String name;
-	private int age;
-	private Timestamp date;
+	private String username;
+	private String password;
+	private String type = "general";
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	public int getAge() {
-		return age;
+	public String getPassword() {
+		return password;
 	}
-	public void setAge(int age) {
-		this.age = age;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public Timestamp getDate() {
-		return date;
+	public String getType() {
+		return type;
 	}
-	public void setDate(Timestamp date) {
-		this.date = date;
+	public void setType(String type) {
+		this.type = type;
 	}
 }
