@@ -1,6 +1,7 @@
 package com.lake.api.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,10 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
 import com.lake.api.model.User;
 import com.lake.api.service.UserService;
+import com.lake.common_utils.web_utils.BaseResponse;
 import com.lake.common_utils.web_utils.BaseWeb;
 
 /**
@@ -46,7 +49,7 @@ public class UserManage extends BaseWeb {
     }
 	
 	@RequestMapping("/search")
-    public void search(HttpServletRequest request,HttpServletResponse response) throws Exception{  
+    public void search(HttpServletRequest request,HttpServletResponse response) {  
 		String username = request.getParameter("username");
 		
 		User u = userService.getUserByName(username);
@@ -58,8 +61,20 @@ public class UserManage extends BaseWeb {
         return ;
     }
 	
+	@RequestMapping("/getAll")
+    public void getAll(HttpServletRequest request,HttpServletResponse response) {  
+		
+		List<User> userList = userService.getAllUser();
+		try {
+			print(response, userList);
+		} catch (IOException e) {
+			log.error("response获取pw失败");
+		}
+        return ;
+    }
+	
 	@RequestMapping("/update")
-    public void update(HttpServletRequest request,HttpServletResponse response) throws Exception{  
+    public void update(HttpServletRequest request,HttpServletResponse response) {  
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
@@ -76,13 +91,34 @@ public class UserManage extends BaseWeb {
     }
 	
 	@RequestMapping("/delete")
-    public void delete(HttpServletRequest request,HttpServletResponse response) throws Exception{  
+    public void delete(HttpServletRequest request,HttpServletResponse response) {  
 		String username = request.getParameter("username");
 		
 		userService.deleteByName(username);
 		log.warn("delete");
 		try {
 			print(response, "success");
+		} catch (IOException e) {
+			log.error("response获取pw失败");
+		}
+        return ;
+    }
+	
+	@RequestMapping("/login")
+    public void login(HttpServletRequest request,HttpServletResponse response) {  
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		User u = userService.getUserByName(username);
+		BaseResponse br = new BaseResponse();
+		if(null != u && u.getPassword().equals(password)) {
+			br.setSuccess(true);
+			br.setData(u);
+		} else {
+			br.setSuccess(false);
+		}
+		try {
+			print(response, br);
 		} catch (IOException e) {
 			log.error("response获取pw失败");
 		}

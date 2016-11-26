@@ -1,5 +1,7 @@
 package com.lake.api.service;
 
+import java.util.List;
+
 import com.lake.api.model.User;
 
 /**
@@ -9,6 +11,8 @@ import com.lake.api.model.User;
  */
 public interface UserService {
 	User getUserByName(String name);
+	
+	List<User> getAllUser();
 	
 	void insert(User u);
 	

@@ -1,7 +1,11 @@
 package com.lake.api.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
 import com.lake.api.dao.UserDao;
 import com.lake.api.model.User;
 import com.lake.api.service.UserService;
@@ -23,6 +27,11 @@ public class UserServiceImpl implements UserService{
 		return userDao.searchByName(name);
 	}
 
+	@Override
+	public List<User> getAllUser() {
+		return userDao.getAllUser();
+	}
+	
 	@Override
 	public void insert(User u) {
 		userDao.insert(u);

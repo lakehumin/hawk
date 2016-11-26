@@ -1,5 +1,6 @@
 package com.lake.api.dao;
 
+import java.util.List;
 import com.lake.api.model.User;
 
 /**
@@ -12,6 +13,8 @@ public interface UserDao {
 	void insert(User user);
 	
 	User searchByName(String name);
+	
+	List<User> getAllUser();
 	
 	void update(User user);
 	
