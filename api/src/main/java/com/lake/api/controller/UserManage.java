@@ -40,9 +40,10 @@ public class UserManage extends BaseWeb {
 		u.setUsername(username);
 		u.setPassword(password);
 		userService.insert(u);
-		
+		BaseResponse br = new BaseResponse();
+		br.setSuccess(true);
 		try {
-			print(response, "success");
+			print(response, br);
 		} catch (IOException e) {
 			log.error("response获取pw失败");
 		}
@@ -82,8 +83,11 @@ public class UserManage extends BaseWeb {
 		u.setUsername(username);
 		u.setPassword(password);
 		userService.update(u);
+		BaseResponse br = new BaseResponse();
+		br.setSuccess(true);
+		br.setData(u);
 		try {
-			print(response, u);
+			print(response, br);
 		} catch (IOException e) {
 			log.error("response获取pw失败");
 		}
@@ -95,9 +99,11 @@ public class UserManage extends BaseWeb {
 		String username = request.getParameter("username");
 		
 		userService.deleteByName(username);
+		BaseResponse br = new BaseResponse();
+		br.setSuccess(true);
 		log.warn("delete");
 		try {
-			print(response, "success");
+			print(response, br);
 		} catch (IOException e) {
 			log.error("response获取pw失败");
 		}
