@@ -83,6 +83,25 @@
   </dependencies>
   <build>
     <finalName>api</finalName>
+    <plugins>
+		<plugin>
+	      <groupId>org.eclipse.jetty</groupId>
+	      <artifactId>jetty-maven-plugin</artifactId>
+	      <version>9.4.0.RC2</version>
+	      <configuration>
+        	<httpConnector>
+			    <port>8088</port>
+			    <host>0.0.0.0</host>
+		  	</httpConnector>
+		  	<webAppSourceDirectory>${project.basedir}/src/main/webapp</webAppSourceDirectory>
+	        <webApp>
+		        <contextPath>/</contextPath>
+		        <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+		    </webApp>
+		    <scanIntervalSeconds>2</scanIntervalSeconds>
+	      </configuration>
+	    </plugin>
+	  </plugins>
   </build>
   <properties>
   	<spring.version>4.3.3.RELEASE</spring.version>
