@@ -1,4 +1,4 @@
-package com.cyt.Bean;
+package com.cyt.Threads;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;

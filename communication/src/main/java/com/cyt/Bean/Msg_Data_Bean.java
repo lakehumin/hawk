@@ -3,13 +3,20 @@ package com.cyt.Bean;
 import java.io.DataInput;
 import java.sql.Date;
 
-public class msg_data_bean {
+public class Msg_Data_Bean {
 	private int id;
-	private int terminal_id;
+	private String terminal_id;
 	private String msg_path;
 	private String img_path;
 	private Date date;
-
+	public Msg_Data_Bean(){}
+	public Msg_Data_Bean(String terminal_id,String msg_path,String img_path,Date date)
+	{
+		this.terminal_id=terminal_id;
+		this.msg_path=msg_path;
+		this.img_path=img_path;
+		this.date=date;
+	}
 	public int getId() {
 		return id;
 	}
@@ -18,11 +25,11 @@ public class msg_data_bean {
 		this.id = id;
 	}
 
-	public int getTerminal_id() {
+	public String getTerminal_id() {
 		return terminal_id;
 	}
 
-	public void setTerminal_id(int terminal_id) {
+	public void setTerminal_id(String terminal_id) {
 		this.terminal_id = terminal_id;
 	}
 
