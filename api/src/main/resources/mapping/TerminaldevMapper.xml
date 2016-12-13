@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lake.api.dao.TerminaldevDao" >
+  <select id="searchById" resultType="com.lake.api.model.Terminaldev">
+    select 
+    *
+    from terminal_dev
+    where terminal_id = #{id}
+  </select>
+</mapper>
