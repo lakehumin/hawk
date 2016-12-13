@@ -1,4 +1,4 @@
-package com.cyt.Bean;
+package com.cyt.Threads;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,22 +17,24 @@ import com.lake.common_utils.stringutils.StringUtils;
 public class ServerThread extends Thread
 {
 	private Socket client=null;
-	private InputStream is=null;
-	private OutputStream os=null;
 	private BufferedReader in=null;
-	private BufferedReader userin=null;
 	private BufferedOutputStream out=null;
-	//private PrintWriter out=null;
-	private byte[] Buffer=null;
-	private String rec="";
+	private String th_LocalADDress;
+	private String th_localsocketaddress;
+	private String th_inetaddress;
 	public ServerThread(Socket client)
 	{
 		this.client=client;
+		th_LocalADDress=client.getLocalAddress().toString();
+		th_localsocketaddress=client.getLocalSocketAddress().toString();
+		th_inetaddress=client.getInetAddress().toString();
+		System.out.println("th_LocalADDress= "+th_LocalADDress);
+		System.out.println("th_localsocketaddress= "+th_localsocketaddress);
+		System.out.println("th_inetaddress= "+th_inetaddress);
 		try 
 		{
 			 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
              out=new BufferedOutputStream(client.getOutputStream());
-             userin = new BufferedReader(new InputStreamReader(System.in));
 		} 
 		catch (IOException e) 
 		{
@@ -43,7 +45,7 @@ public class ServerThread extends Thread
 	{
 		if(client.isConnected())
 		{
-			 ReceiveThread reThread=new ReceiveThread(client,in,out,userin);
+			 ReceiveThread reThread=new ReceiveThread(client,in,out);
 			 reThread.start();
 		}
 	}
@@ -59,7 +61,6 @@ public class ServerThread extends Thread
 		try {
 			in.close();
 			out.close();
-		    userin.close();
 		    if(client != null){
 		          client.close();
 		        }
@@ -68,8 +69,6 @@ public class ServerThread extends Thread
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
-		
 	}
 	public void run() 
 	{

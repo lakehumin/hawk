@@ -115,7 +115,7 @@ public class SqlHelper {
 		}
 	 }
 	 //重载executeUpdate函数
-	 public static void executeUpdate(String sql,String []parameters)
+	 public static void executeUpdate(String sql,Object []parameters)
 	{
 		 sqct=SqlConnectionPool.getConnection();
 		 try {
@@ -124,7 +124,7 @@ public class SqlHelper {
 			{
 				for(int i=0;i<parameters.length;i++)
 				{
-					ps.setString(i+1, parameters[i]);
+					ps.setObject(i+1, parameters[i]);
 				}
 			}
 			ps.executeUpdate();

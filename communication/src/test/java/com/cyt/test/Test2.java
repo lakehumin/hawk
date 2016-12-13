@@ -5,6 +5,7 @@ import java.io.File;
 import javax.imageio.stream.FileImageOutputStream;
 
 import com.cyt.Bean.SerialPortBean;
+import com.cyt.Service.DataAnalyseService;
 import com.cyt.Service.Sim800AService;
 
 import java.io.*;
@@ -32,11 +33,15 @@ public class Test2
 			}
 		}
 		*/
-		//String phonenum="15861815868";
+		//String phonenum="15861815868"; 
+		
 		//String msg="hello cjs!";
 		final Sim800AService s800service=new Sim800AService();
 		s800service.setSP(SPB);
-		/*测试接受短信
+		
+		 //测试接受短信
+		
+		/*
 		Thread read_thread=new Thread()
 		{
 			public void run() {
@@ -46,8 +51,22 @@ public class Test2
 //		if (s800service.CheckAT()) {
 //			read_thread.start();
 //		}
-		read_thread.start();
-		*/
+		read_thread.start();*/
+		
+		//开启读取线程
+		
+		new Thread(){
+				public void run()
+				{
+//					try {
+//						Thread.sleep(60*1000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+					DataAnalyseService.ReadStoredMsg(s800service);
+				}
+			}.start();
+		
 		//测试短信发送功能
 		/*if(s800service.CheckAT())
 		{
@@ -65,13 +84,27 @@ public class Test2
 			{
 				System.out.println("测试成功！");
 			}
-		}
+		}*/
+		//s800service.Read_MMS("32");
+		//测试接受彩信
+		/*
+		 
+		Thread read_thread=new Thread()
+		{
+			public void run() {
+				s800service.Wait_For_MMS();;
+			}
+		};
+//		if (s800service.CheckAT()) {
+//			read_thread.start();
+//		}
+		read_thread.start();
 		*/
 		//测试gprs初始化设置
-		if(s800service.StartGPRS())
-		{
-			System.out.println("初始化 SUCCESS!");
-		}
+		//if(s800service.StartGPRS())
+		//{
+		//	System.out.println("初始化 SUCCESS!");
+		//}
 		//SPB.startReadingDataThread();
 		//String path= "C:\\Users\\cyt\\Desktop\\ico\\test2.png";
 //		while(true){
