@@ -7,4 +7,10 @@
     from terminal_dev
     where terminal_id = #{id}
   </select>
+  <select id="searchAllInfo" resultType="com.lake.api.model.Terminaldev">
+    select 
+    *
+    from terminal_dev
+    order by terminal_id
+  </select>
 </mapper>

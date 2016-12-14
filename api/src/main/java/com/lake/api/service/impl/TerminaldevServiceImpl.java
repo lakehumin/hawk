@@ -1,5 +1,7 @@
 package com.lake.api.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -23,5 +25,10 @@ public class TerminaldevServiceImpl implements TerminaldevService {
 	@Override
 	public Terminaldev getTerminalInfo(String id) {
 		return terminaldevDao.searchById(id);
+	}
+
+	@Override
+	public List<Terminaldev> getAllTerminalInfo() {
+		return terminaldevDao.searchAllInfo();
 	}
 }

@@ -1,5 +1,6 @@
 package com.lake.api.dao;
 
+import java.util.List;
 import com.lake.api.model.Terminaldev;
 
 /**
@@ -10,4 +11,6 @@ import com.lake.api.model.Terminaldev;
 public interface TerminaldevDao {
 	
 	Terminaldev searchById(String id);
+	
+	List<Terminaldev> searchAllInfo();
 }

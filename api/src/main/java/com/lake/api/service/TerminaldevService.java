@@ -1,5 +1,7 @@
 package com.lake.api.service;
 
+import java.util.List;
+
 import com.lake.api.model.Terminaldev;
 
 /**
@@ -10,4 +12,6 @@ import com.lake.api.model.Terminaldev;
 public interface TerminaldevService {
 
 	Terminaldev getTerminalInfo(String id);
+	
+	List<Terminaldev> getAllTerminalInfo();
 }
