@@ -2,11 +2,17 @@ package com.cyt.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 import javax.imageio.stream.FileImageOutputStream;
+import javax.swing.JApplet;
 import javax.swing.Spring;
 
 import com.cyt.Bean.DeviceInfoBean;
@@ -22,16 +28,17 @@ import com.lake.common_utils.stringutils.StringUtils;
 
 public class DataAnalyseService {
 	//private static byte[] buffer=null;
-	private static HashMap<String, String> tel_TidMap=new HashMap<String, String>();
+	private static HashMap<String, String> tel_TidMap=null;
 	static{
-		tel_TidMap.put("15905195757", "01");
-		tel_TidMap.put("+8613814074227", "02");
-		tel_TidMap.put("+8613814074233", "03");
-		//tel_TidMap.put("15905195757", "02");
-		//tel_TidMap.put("15905195757", "03");
-		//tel_TidMap.put("15905195757", "04");
-		//tel_TidMap.put("15905195757", "05");
-	}
+		tel_TidMap=new HashMap<String, String>();
+		Terminal_Dev_Dao tdo=new Terminal_Dev_Dao();
+		ArrayList<Terminal_Dev_Bean> tdblst=tdo.SearchAll();
+		for (Terminal_Dev_Bean tdb : tdblst) {
+			tel_TidMap.put(tdb.getTel_num(), tdb.getTerminal_id());
+		}
+		
+		}
+	
 	public static byte[] List2Array(ArrayList<Byte> array)
 	{
 		byte[] Buffer=new byte[array.size()];
@@ -71,13 +78,13 @@ public class DataAnalyseService {
 				if(s800.Read_Message(index))
 				{
 					//将短信的isread状态设为已读
-					System.out.println("读取此短信完毕，设置为已读");
+					log("读取"+index+"短信完毕，设置为已读");
 					mtd.update(text_lst.get(i));
 				}
 			}
 		}
 		else {
-			System.out.println("存储中无文本短信");
+			log("存储中无文本短信");
 		}
 		//读取彩信格式的短消息
 		ArrayList<Msg_Title_Bean> mms_lst=null;
@@ -86,70 +93,60 @@ public class DataAnalyseService {
 		{
 			if(s800.Set_MMS_Environment())
 			{	
-				System.out.println("hello");
 				for(int i=0;i<mms_lst.size();i++)
 				{
-					System.out.println("开始读取彩信");
+					log("开始读取彩信");
 					//遍历数组，对每条消息进行读取
 					String index=mms_lst.get(i).getnum();
 					if(s800.Read_MMS(index))
 					{
 						//将短信的isread状态设为已读
-						System.out.println("读取此短信完毕，设置为已读");
+						log("读取"+index+"彩信完毕，设置为已读");
 						mtd.update(mms_lst.get(i));
 					}
 					else {
-						System.out.println("读取失败");
+						logerr("读取"+index+"彩信失败");
 					}
 				}
 			}
 			else {
-				System.out.println("短信初始化失败，请重启");
+				logerr("短信初始化失败，请重启");
 			}
 		}
 		else{
-			System.out.println("存储中无未读彩信");
+			log("存储中无未读彩信");
 		}
 	} 
 	//处理text短信的内容
-	public static void TextAnalyse(String msg,String tel)
+	public static void TextAnalyse(String msg,String tel,String date)
 	{
 		Device_Info_Dao did=new Device_Info_Dao();
 		Terminal_Dev_Dao tdd=new Terminal_Dev_Dao();
 		String telnum="'"+new String(StringUtils.hexStringToByte(tel))+"'";
-		System.out.println("telnum="+telnum);
-		ArrayList<Terminal_Dev_Bean> temp=tdd.Search(3, telnum);
+		log("telnum="+telnum);
+		ArrayList<Terminal_Dev_Bean> temp=tdd.Search(3,telnum);
 		if (msg.startsWith("01"))
 		{
 			//01代表收到的是设备信息
 			String battery=new String(StringUtils.hexStringToByte(msg.substring(2,6)));
-			System.out.println("battery="+battery);
-			String voltage=Integer.parseInt(msg.substring(6,7),16)+""+"."+Integer.parseInt(msg.substring(7, 8),16)+"v";
-			System.out.println("voltage="+voltage);
+			log("battery="+battery);
+			String voltage=Integer.parseInt(msg.substring(6,7),16)+""+"."+Integer.parseInt(msg.substring(7, 8),16);
+			log("voltage="+voltage);
 			String workstate=getworkstate(msg.substring(8,10));
-			System.out.println("workstate="+workstate);	
-			for (int i = 0; i < temp.size(); i++) {
+			log("workstate="+workstate);	
+			for (int i = 0; i < temp.size(); i++) 
+			{
 			     String terminal_id=temp.get(i).getTerminal_id();
-			    DeviceInfoBean dib= did.Searchid(terminal_id);
-			    if(dib==null){	
-			    //判断数据库无此号码设备 则增添新设备
-			    dib=new DeviceInfoBean();
-			    dib.setTerminal_id(terminal_id);
-			    dib.setBattery(battery);
-			    dib.setVoltage(voltage);
-			    dib.setWorkstate(workstate);
-			    did.add(dib);
-			}
-			    else {
-			    //检索出数据库中的此号设备
-			    	 dib=new DeviceInfoBean();
-					 dib.setBattery(battery);
-					 dib.setVoltage(voltage);
-					 dib.setWorkstate(workstate);
-					 did.update(dib);
-				}
-		}
-	}
+			     //向数据库添加新纪录
+			     DeviceInfoBean dib= new DeviceInfoBean();		    
+			     dib.setTerminal_id(terminal_id);
+			     dib.setBattery(battery);
+			     dib.setVoltage(voltage);
+			     dib.setWorkstate(workstate);
+			     dib.setDate(date);
+			     did.add(dib);
+		   }
+	   }
 		else if (msg.startsWith("02")) 
 		{
 			//02代表收到的是心跳确认包
@@ -165,13 +162,13 @@ public class DataAnalyseService {
 			//03代表收到的是配置信息的回复
 			if(msg.endsWith("01"))
 			{
-				System.out.println("配置时间成功");
+				log(temp.get(0).getTerminal_id()+"配置时间成功");
 			}
 			else if (msg.endsWith("02")) {
-				System.err.println("配置时间失败，请重试！");
+				logerr(temp.get(0).getTerminal_id()+"配置时间失败，请重试！");
 			}
 			else {
-				System.err.println("接受短信内容有误，请重试！");
+				logerr(temp.get(0).getTerminal_id()+"接受短信内容有误，请重试！");
 			}
 		}
 		else if (msg.startsWith("04")) 
@@ -180,20 +177,29 @@ public class DataAnalyseService {
 		    String tel_change=msg.substring(2, msg.length()-2);
 		    if (msg.endsWith("01")) 
 		    {
-		    	System.out.println("配置电话成功");
-		    	System.out.println("更改的电话为"+tel_change);
+		    	log(temp.get(0).getTerminal_id()+"配置电话成功");
+		    	log(temp.get(0).getTerminal_id()+"更改的电话为"+tel_change);
 			}
 		    else if(msg.endsWith("02")){
-		    	System.out.println("更改号码失败");
+		    	logerr(temp.get(0).getTerminal_id()+"更改号码失败");
 		    }
 		    else
 		    {
-		    	System.out.println("接收到的短信有误      ");
+		    	logerr(temp.get(0).getTerminal_id()+"接收到的短信有误      ");
 		    }
 			
 		}
+		else if(msg.startsWith("05"))
+		{
+			//05代表对时完成
+			log(temp.get(0).getTerminal_id()+"对时完成");
+		}
+		else 
+		{
+			log(temp.get(0).getTerminal_id()+"收到非终端短信 "+msg);
+		}
 	}
-	//处理gprs裸数据
+	//处理gprs裸数据()
 	public static void GPRSDataAnalyse(String rec)
 	{
 		if(rec.startsWith("3F"))
@@ -202,19 +208,40 @@ public class DataAnalyseService {
 			String devString=String.valueOf(devnum);
 			String msg_Date=new String(StringUtils.hexStringToByte(rec.substring(4,20)));
 			String origin=new String(StringUtils.hexStringToByte(rec.substring(20,rec.length()-4)));
-			System.out.println("设备编号是："+devString);
-			System.out.println("发送日期是："+msg_Date);
-			System.out.println("原始数据是："+origin);	
+			log("设备编号是："+devString);
+			log("发送日期是："+msg_Date);
+			log("原始数据是："+origin);	
 		}
 		else 
 		{
-			System.err.println("信息有误，请重发。。。");
+			logerr("信息有误，请重发。。。");
 		}
+	}
+	//与前端的通信
+	public static String TCPDataAnalyse(String rec,Sim800AService s800)
+	{
+		String Msg="";
+		if (rec.startsWith("02")) {
+			Msg="02";
+		}
+		else if (rec.startsWith("03")) {
+			String terminal_id=rec.substring(2,6);
+			String cmd=rec.substring(6,8);
+			String content=rec.substring(8);
+			if(s800.Send_Message(tel_TidMap.get(terminal_id),Set_English_MSG(cmd, content)))
+			{
+				Msg=rec+"01";
+			}
+			else {
+				Msg=rec+"02";
+			}
+		}		
+		return Msg;
 	}
 	//处理MMS裸数据并保存到本地
 	public static void MSGDataAnalyse(String origin_data,String index,String tel_num,String _date)
 	{
-		System.out.println("数据处理。。。");
+		log("MMS数据处理。。。");
 		int bgn_index=origin_data.indexOf("0D0A", 38)+4;
 		int end_index=origin_data.length()-12;
 		String new_data=origin_data.substring(bgn_index,end_index);
@@ -222,12 +249,33 @@ public class DataAnalyseService {
 		String telsString=new String(StringUtils.hexStringToByte(tel_num));
 		byte[] num=StringUtils.hexStringToByte(index);
 		String Num=new String(num);
-		String path="C:\\Users\\cyt\\Desktop\\ico\\test"+Num+".png";
+		String path="D:\\SerialPort_MSG\\"+tel_TidMap.get(telsString)+"_"+dateString+".png";
 		saveToImgFile(new_data, path);
 		Date date=getDate(dateString);
 		Msg_Data_Bean mdb=new Msg_Data_Bean(tel_TidMap.get(telsString),null,path,date);
 		new msg_data_Dao().add(mdb);
-		System.out.println("处理完毕");
+		log("MMS处理完毕");
+	}
+	//设置英文短信的发送格式
+	public static String Set_English_MSG(String cmd,String content)
+	{
+		String Msg="";
+		if ("01".equals(cmd)) {
+			Msg="01";
+		}
+		if ("02".equals(cmd)) {
+			Msg="02";
+		}
+		if ("03".equals(cmd)) {
+			Msg="03"+content;
+		}
+		if ("04".equals(cmd)) {
+			Msg="04"+content;
+		}
+		if ("05".equals(cmd)) {
+			Msg="05";
+		}
+		return Msg;
 	}
 	//设置中文短信的发送信息格式
 	public static String Set_CHINESE_MSG(String msg,String phoneNum)
@@ -309,7 +357,7 @@ public class DataAnalyseService {
 		return val;
 	}
 	//生成java.sql.date类型的数据
-	public      static Date getDate(String dateString)
+	public  static Date getDate(String dateString)
 	{
 		Date date;
 		int year=Integer.parseInt(dateString.substring(0,4))-1900;
@@ -318,6 +366,7 @@ public class DataAnalyseService {
 		date=new Date(year,month,day);
 		return date;
 	}
+	//工作状态映射
 	private static String getworkstate(String index)
 	{
 		if ("01".equals(index)) 
@@ -337,5 +386,17 @@ public class DataAnalyseService {
 			return "Exception";
 		}
 	}
-		
+	//log函数
+	private static void log(String msg)
+	{
+		DateFormat format=new SimpleDateFormat("YY-MM-dd HH:mm:ss");
+		String time=format.format(new java.util.Date());
+		System.out.println(time+"--> "+msg);
+	}
+	private static void logerr(String msg)
+	{
+		DateFormat format=new SimpleDateFormat("YY-MM-dd HH:mm:ss");
+		String time=format.format(new java.util.Date());
+		System.err.println(time+"--> "+msg);
+	}
 }

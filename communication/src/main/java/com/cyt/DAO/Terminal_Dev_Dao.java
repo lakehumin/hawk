@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.cyt.Bean.Terminal_Dev_Bean;
 import com.cyt.Bean.Terminal_Dev_Bean;
+import com.lake.common_utils.db_utils.SqlConnectionPool;
 import com.lake.common_utils.db_utils.SqlHelper;
 
 public class Terminal_Dev_Dao {
@@ -20,7 +21,6 @@ public class Terminal_Dev_Dao {
 		hmp.put(3,"tel_num");
 		hmp.put(4,"location");
 		hmp.put(5, "islinked");
-		SqlHelper.init();
 	}
 	//增
 	public boolean add(Terminal_Dev_Bean tdb) 
@@ -74,7 +74,34 @@ public class Terminal_Dev_Dao {
 			e.printStackTrace();
 		}
 		finally{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
+		}
+		return tdb_lst;
+	}
+	//查询表中所有成员
+	public ArrayList<Terminal_Dev_Bean> SearchAll()
+	{
+		ArrayList<Terminal_Dev_Bean> tdb_lst=new ArrayList<Terminal_Dev_Bean>();
+		String sql="select *from terminal_dev";
+		//String parameters[]={content};
+		ResultSet rs=SqlHelper.executeQuery(sql, null);
+		try {
+			while(rs.next())
+			{
+				Terminal_Dev_Bean tdb=new Terminal_Dev_Bean();
+				tdb.setId(rs.getInt(1));
+				tdb.setTerminal_id((rs.getString(2)));
+				tdb.setTel_num(rs.getString(3));
+				tdb.setLocation(rs.getString(4));
+				tdb.setIslinked(rs.getBoolean(5)); 		
+				tdb_lst.add(tdb);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return tdb_lst;
 	}
@@ -100,9 +127,8 @@ public class Terminal_Dev_Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		finally
-		{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+		finally{
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return tdb;
 	}

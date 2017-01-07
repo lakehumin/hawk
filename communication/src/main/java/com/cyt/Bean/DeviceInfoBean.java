@@ -6,13 +6,22 @@ private String terminal_id;
 private String battery;
 private String voltage;
 private String workstate;
+private String date;
 public DeviceInfoBean(){}
-public DeviceInfoBean(String terminal_id,String battery,String voltage,String workstate)
+public DeviceInfoBean(String terminal_id,String battery,String voltage,String workstate,String date)
 {
 	this.terminal_id=terminal_id;
 	this.battery=battery;
 	this.voltage=voltage;
 	this.workstate=workstate;
+	this.date=date;
+}
+
+public String getDate() {
+	return date;
+}
+public void setDate(String date) {
+	this.date = date;
 }
 public int getId() {
 	return id;

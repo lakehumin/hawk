@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.cyt.Bean.DeviceInfoBean;
 import com.cyt.Bean.Terminal_Dev_Bean;
+import com.lake.common_utils.db_utils.SqlConnectionPool;
 import com.lake.common_utils.db_utils.SqlHelper;
 
 public class Device_Info_Dao {
@@ -20,14 +21,14 @@ public class Device_Info_Dao {
 		hmp.put(3,"battery");
 		hmp.put(4,"voltage");
 		hmp.put(5, "workstate");
-		SqlHelper.init();
+		hmp.put(6, "date");
 	}
 	//增
 	public boolean add(DeviceInfoBean dib) 
 	{
 		boolean b=false;
-		String sql="insert into deviceinfo(terminal_id,battery,voltage,workstate) values(?,?,?,?)";
-		String []parameters={dib.getTerminal_id()+"",dib.getBattery(),dib.getVoltage()+"",dib.getWorkstate()+""};
+		String sql="insert into deviceinfo(terminal_id,battery,voltage,workstate,date) values(?,?,?,?,?)";
+		String []parameters={dib.getTerminal_id()+"",dib.getBattery(),dib.getVoltage()+"",dib.getWorkstate()+"",dib.getDate()};
 		SqlHelper.executeUpdate(sql, parameters);
 		b=true;
 		return b;
@@ -45,8 +46,8 @@ public class Device_Info_Dao {
 	public boolean update(DeviceInfoBean dib)
 	{
 		boolean b=false;
-		String sql="update deviceinfo set battery=?,voltage=?,workstate=? where terminal_id=?";
-		String []parameters={dib.getBattery(),dib.getVoltage(),dib.getWorkstate(),dib.getTerminal_id()};
+		String sql="update deviceinfo set battery=?,voltage=?,workstate=?,date=? where terminal_id=?";
+		String []parameters={dib.getBattery(),dib.getVoltage(),dib.getWorkstate(),dib.getTerminal_id(),dib.getDate()};
 		SqlHelper.executeUpdate(sql, parameters);
 		b=true;
 		return b;
@@ -74,10 +75,11 @@ public class Device_Info_Dao {
 			e.printStackTrace();
 		}
 		finally{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return dib_lst;
 	}
+	//根据终端编号查询对应的
 	public DeviceInfoBean Searchid(String terminal_id)
 	{
 		DeviceInfoBean dib=new DeviceInfoBean();
@@ -101,7 +103,7 @@ public class Device_Info_Dao {
 		}
 		finally
 		{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return dib;
 	}

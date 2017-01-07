@@ -6,12 +6,6 @@ import java.util.Map;
 import com.lake.common_utils.db_utils.SqlConnectionPool.SqlConnection;
 
 public class SqlHelper {
-
-	//最大连接数
-		private static int maxSize = 20;
-		//初始连接数
-		private static int initialSize = 3;
-		
 		//数据库驱动  
 		private static String jdbcDriver = "com.mysql.jdbc.Driver";
 		//数据库url  
@@ -27,78 +21,35 @@ public class SqlHelper {
 	    //数据库密码 
 	    private static String dbPassword = "root";
 	    //数据库连接池
-	    private static volatile SqlConnectionPool SqlConnectionPool;
+	    //private static volatile SqlConnectionPool SqlConnectionPool;
 	    private static PreparedStatement ps=null;
 	    private static ResultSet rs=null;
-	    private static SqlConnection sqct=null;
-	    //prepareStatement sql语句预存储
-	    //private static Map<String,String> sqlMap;
-	    
-	    public static synchronized void init() {
-	    	if(checkInit()) {
-	    		System.err.println("SqlHelper初始化已完成");
-	    		return ;
-	    	}
-	    	SqlConnectionPool = new SqlConnectionPool(maxSize,initialSize,
-	    			jdbcDriver,dbUrl,dbUsername,dbPassword);
-	    	//initSqlMap();
+	    private static Connection ct=null;
+	    static{
+	    	try {
+				Class.forName(jdbcDriver);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 	    }
-
-		public static synchronized void init(String tableName) {
-	    	if(checkInit()) {
-	    		System.err.println("SqlHelper初始化已完成");
-	    		return ;
-	    	}
-	    	dbTableName = tableName;
-	    	init();
-	    }
-
-		public static synchronized void init(String dbName, 
-				String tableName) {
-	    	if(checkInit()) {
-	    		System.err.println("SqlHelper初始化已完成");
-	    		return ;
-	    	}
-	    	dbUrl = "jdbc:mysql://114.212.118.115:3306/" + dbName;
-	    	dbTableName = tableName;
-	    	init();
-	    }
-
-		public static synchronized void init(String ip, 
-				String dbName, String tableName) {
-			if(checkInit()) {
-	    		System.err.println("SqlHelper初始化已完成");
-	    		return ;
-	    	}
-			dbUrl = "jdbc:mysql://" + ip + ":3306/" + dbName;
-			dbTableName = tableName;
-			init();
-		}
-		
-		public static synchronized void init(String ip, String dbName, 
-				String tableName, int maxSize, int initialSize) {
-			if(checkInit()) {
-	    		System.err.println("SqlHelper初始化已完成");
-	    		return ;
-	    	}
-			dbUrl = "jdbc:mysql://" + ip + ":3306/" + dbName;
-			dbTableName = tableName;
-			SqlHelper.maxSize = maxSize;
-			SqlHelper.initialSize = initialSize;
-			init();
-		}
-		private static boolean checkInit() {
-			if(null != SqlConnectionPool) {
-	    		return true;
-	    	}
-			return false;
+	    public static Connection getConnection()
+		{
+			try
+			{
+				ct=DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+			} catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return ct;
 		}
 		//重载executeQuery函数
-	 public static ResultSet executeQuery(String sql,Object[]parameters)
-	 {
-		 sqct=SqlConnectionPool.getConnection();
+	 public static synchronized ResultSet executeQuery(String sql,Object[]parameters)
+	 {	
 		try {
-		        ps=sqct.getConnection().prepareStatement(sql);
+			    ct=getConnection();
+		        ps=ct.prepareStatement(sql);
 			if (parameters!=null&&!parameters.equals(""))
 			{
 				for(int i=0;i<parameters.length;i++)
@@ -115,11 +66,12 @@ public class SqlHelper {
 		}
 	 }
 	 //重载executeUpdate函数
-	 public static void executeUpdate(String sql,Object []parameters)
+	 public static synchronized void executeUpdate(String sql,Object []parameters)
 	{
-		 sqct=SqlConnectionPool.getConnection();
+		 
 		 try {
-			ps=sqct.getConnection().prepareStatement(sql);
+			 ct=getConnection();
+			 ps=ct.prepareStatement(sql);
 			if (parameters!=null&&!parameters.equals(""))
 			{
 				for(int i=0;i<parameters.length;i++)
@@ -135,7 +87,8 @@ public class SqlHelper {
 		}
 		 finally
 			{
-				close(rs, ps,sqct.getConnection());
+				close(rs,ps,ct);
+				
 			}
 		 
 	}
@@ -183,9 +136,9 @@ public class SqlHelper {
 			
 			
 		}	
-	 public static SqlConnection getSqlConnection() 
+	 public static ResultSet getreResultSet() 
 	 {
-		 return sqct;		
+		 return rs;		
 	 }
 	 public static PreparedStatement getpPreparedStatement() 
 	 {
