@@ -1,4 +1,10 @@
 package com.cyt.Service;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.locks.Lock;
+
 import com.cyt.Bean.SerialPortBean;
 import com.cyt.DAO.Msg_Title_Dao;
 import com.lake.common_utils.stringutils.StringUtils;
@@ -27,11 +33,11 @@ public class Sim800AService
 		delay(delay);
 		if("61740D0D0A4F4B0D0A".equals(SP.getRec_string()))  //61740D0D0A4F4B0D0A是 at(换行)(换行)OK(换行)的16进制表达式
 		{
-			System.out.println("test1 success!");
+			log("test1 success!");
 			b=true;
 		}
 		else {
-			System.out.println("test1 fail!");
+			log("test1 fail!");
 		}
 		return b;
 	}
@@ -44,16 +50,16 @@ public class Sim800AService
 		delay(delay);
 		if("41542B434D47463D310D0D0A4F4B0D0A".equals(SP.getRec_string()))  //返回OK
 		{
-			System.out.println("set environment success!");
+			log("set environment success!");
 			b=true;
 		}
 		else {
-			System.out.println("test2 fail!");
+			log("test2 fail!");
 		}
 		return b;
 	}
 	//3、发送短信（需要手机号和短信）（英文、与终端设备通信）
-	public boolean Send_Message(String phoneNum,String msg)
+	public synchronized boolean  Send_Message(String phoneNum,String msg)
 	{
 		boolean b=false;
 		String ATCMGS="41542B434D47533D";
@@ -64,7 +70,7 @@ public class Sim800AService
 		delay(delay);
 		if ((ATCMGS+"0D0A3E20").equals(SP.getRec_string())) 
 		{
-			System.out.println("设置成功。。。正在发送。。。");
+			log("正在发送短信。。。");
 			byte[] _msg=msg.getBytes();
 			String msg_0x=StringUtils.byte2string(_msg)+"1A0D";
 			SP.write(msg_0x, "hex");
@@ -75,7 +81,7 @@ public class Sim800AService
 		return b;
 	}
 	//3.1、 发送中文短信（与管理人员进行通信）
-	public boolean Send_Message_toManger(String phoneNum,String Msg)
+	public synchronized    boolean  Send_Message_toManger(String phoneNum,String Msg)
 	{
 		String ATCMGF="41542B434D47463D300D";  //AT+CMGF=0 PDU模式
 		SP.write(ATCMGF, "hex");
@@ -90,62 +96,81 @@ public class Sim800AService
 			SP.write(ATCMGS, "hex");
 			delay(delay);
 			if (SP.getRec_string().equals(ATCMGS+"0D0A3E20")) {
-				System.out.println("start send");
+				log("start send");
 				SP.write(chmsg, "ascll");
 				SP.write("1a", "hex");
 			}
 		}
 		else {
-			System.out.println("请重启设备。。。");
+			log("请重启设备。。。");
 		}
 		return true;
 	}
-	//4、获取接收到的短消息（并不读取），只是将其存入数据库中，读取由会迟滞到同一时间段。
+	//4、获取接收到的短消息,同时读取。
 	public  void Wait_For_Message()
 	{
 		boolean listen=true;
-		System.out.println("正在准备接收短信。。。");
+		log("正在准备接收短信。。。");
 		while(listen)
 		{
 			delay(delay);  
 			if(SP.getRec_string().startsWith("0D0A2B434D54493A2022534D22"))//获取短消息
 			{
-				if(SP.getRec_string().endsWith("224D4D53205055534822"))   //判断接收到的是彩信
+				if(SP.getRec_string().endsWith("224D4D532050555348220D0A"))   //判断接收到的是彩信
 				{
+					log("收到彩信");
+					String texttitle=SP.getRec_string();
 					int begin_index=28;
-					int end_index=SP.getRec_string().indexOf("2C", 29);
-					String index=SP.getRec_string().substring(begin_index, end_index);
+					int end_index=texttitle.indexOf("2C", 29);
+					final String index=SP.getRec_string().substring(begin_index, end_index);
 					String str=new String(StringUtils.hexStringToByte(index));
-					System.out.println("读取的号码是："+str);
-					DataAnalyseService.SaveMsgTitle(index, "MMS");
+					log("读取的号码是："+str);
+					new Thread(){
+						public void run()
+						{
+							Read_MMS(index);
+						}
+					}.start();
+					//DataAnalyseService.SaveMsgTitle(index, "MMS");
 					SP.setRec_string("");
 				}					
 				else 
 				{
+					log("收到短信");
 					int begin_index=28;
-					String index=SP.getRec_string().substring(begin_index,SP.getRec_string().length()-4);
-					System.out.println(index);
-					DataAnalyseService.SaveMsgTitle(index, "Text");
-					SP.setRec_string("");
+					final String index=SP.getRec_string().substring(begin_index,SP.getRec_string().length()-4);
+					log(index);
+					new Thread()
+					{
+						public void run()
+						{
+							Read_Message(index);
+						}
+					}.start();
+					//DataAnalyseService.SaveMsgTitle(index, "Text");
+					   SP.setRec_string("");
 				}
 			}
 			else {
 				continue;
 			}
 		}
-		System.out.println("结束循环");
+		log("结束循环");
 	}
+	//4*test读取
+	
 	
 	//5、读取第N条短信
-	public  boolean  Read_Message(String index) 
+	public  synchronized boolean  Read_Message(String _index) 
 	{
 		boolean b=false;
+		String index=_index;
 		String  ATCMGF="at+cmgf=1\r";//设置读取形式为text
 		SP.write(ATCMGF, "ascll");
 		delay(delay);
 		if (new String(SP.getRec_byte()).equals(ATCMGF+"\r\nOK\r\n")) 
 		{
-			System.out.println("SUCCESS");
+			log("SUCCESS");
 			String ATCMGR="41542B434D47523D"+index+"0D";//读取命令
 			SP.write(ATCMGR, "hex");
 			delay(delay);
@@ -155,22 +180,38 @@ public class Sim800AService
 				int tel_bgnindex=rec.indexOf("2C",30)+4;
 				int tel_endindex=rec.indexOf("2C", tel_bgnindex)-2;
 				String tel=rec.substring(tel_bgnindex,tel_endindex);
-				int bgn_index=rec.indexOf("0D",ATCMGR.length()+4);
-				int end_index=rec.lastIndexOf("0D");
-				String Message=rec.substring(bgn_index+4,end_index);
-				System.out.println("MESSAGE="+Message);
+				int month_bgn_index=rec.indexOf("2F")+2;
+				int day_bgn_index=rec.indexOf("2C",month_bgn_index)-6;
+				String date=rec.substring((month_bgn_index)-6,day_bgn_index+4);
+				String month=new String(StringUtils.hexStringToByte(rec.substring(month_bgn_index,month_bgn_index+4)));
+				String day=rec.substring(day_bgn_index,day_bgn_index+4);
+				if(!CheckDate(month, day))
+				{
+					String telephone=new String(StringUtils.hexStringToByte(tel));
+					log(telephone+"所对应的机器出现了时间偏离问题");
+					String Msg=DataAnalyseService.Set_English_MSG("05", null);
+					Send_Message(telephone, Msg);
+					return false;
+				}
+				int text_bgn_index=rec.indexOf("0D",ATCMGR.length()+4);
+				int text_end_index=rec.indexOf("0D",text_bgn_index+1);    //去除结尾的\r\nOK\r\n
+				//log("length="+rec.length());
+				//log("bgnindex="+bgn_index);
+				//log("endindex="+end_index);
+				String Message=rec.substring(text_bgn_index+4,text_end_index);
+				//log("MESSAGE="+Message);
 				byte[] msg=StringUtils.hexStringToByte(Message);
 				String _msg=new String(msg);     
-				System.out.println("短信内容是："+_msg);
-				DataAnalyseService.TextAnalyse(_msg, tel);
+				log("短信内容是："+_msg);
+				//DataAnalyseService.TextAnalyse(_msg, tel,date);
 				b=true   ;
 			}    
 			else {
-			System.out.println("读取短信出错");
+			log("读取短信出错");
 			}
 		}
 		else {
-			System.out.println("Wrong");
+			log("Wrong");
 		}
 		return b;
 	}
@@ -227,7 +268,7 @@ public class Sim800AService
 										String ATSAPBR_11="61742B73617062723D312C310D";
 										SP.write(ATSAPBR_11, "hex");
 										delay(delay);
-										if (SP.getRec_string().equals(ATSAPBR_11)||mms_isinit)     //激活承载三
+										if (SP.getRec_string().equals(ATSAPBR_11)||mms_isinit||SP.getRec_string().equals("0D0A4F4B0D0A"))     //激活承载三
 										{
 											delay(delay);
 											if (SP.getRec_string().equals("0D0A4F4B0D0A")||mms_isinit) //激活承载三
@@ -238,103 +279,68 @@ public class Sim800AService
 												delay(delay);
 												if (SP.getRec_string().endsWith("0D0A4F4B0D0A"))
 												{
-													System.out.println("设置环境成功！");
+													log("设置环境成功！");
 													return true;
 												}
 												else {
-													System.out.println("激活承载四失败！");
+													logerr("激活承载四失败！");
 												}
 											}
 											else {
-												System.out.println("激活承载三失败！");
+												logerr("激活承载三失败！");
 											}
 											
 										}
 										else{
-											System.out.println("激活承载三失败！");
+											logerr("激活承载三失败！");
 										}
 											
 										
 									}
 									else {
-										System.out.println("激活二失败");
+										logerr("激活二失败");
 									}
 								}
 						}
 						else {
-							System.out.println("激活承载失败！");
+							logerr("激活承载失败！");
 						}
 					}
 					else {
-						System.out.println("设置网络ip失败，请重启。。。");
+						logerr("设置网络ip失败，请重启。。。");
 					}
 				}
 				else {
-					System.out.println("设置上下文id失败，请重启。。。");
+					logerr("设置上下文id失败，请重启。。。");
 				}
 			/*}
 			else {
-				System.out.println("设置短信中心失败，请重启。。。");
+				logerr("设置短信中心失败，请重启。。。");
 			}
 			*/
 		}
 		else if(SP.getRec_string().equals(ATCMMSINIT+"0D0A4552524F520D0A")) 
 		{
-			System.out.println("彩信系统已经初始化。。。");
+			log("彩信系统已经初始化。。。");
 			mms_isinit=true;
 			return Set_MMS_Environment();
 		}
 		else {
-			System.out.println("设置失败，请重启。。。");
+			logerr("设置失败，请重启。。。");
 		}
 		return b;
 	}
-	//7、等待接受彩信
-	/*public void Wait_For_MMS()
-	{
-			boolean listen=true;
-			String ATCMMSEDIT="61742B636D6D73656469743D300D";
-			SP.write(ATCMMSEDIT, "hex");
-			delay(delay);
-			if (SP.getRec_string().equals(ATCMMSEDIT+"0D0A4F4B0D0A"))
-			{
-				System.out.println("关闭编辑模式，正在准备接收彩信。。。");
-			}			
-			while(listen)
-			{
-				delay(delay);
-				if(SP.getRec_string().startsWith("0D0A2B434D54493A2022534D22"))//0D0A2B434D54493A2022534D222C340D0A
-				{
-					int begin_index=28;
-					int end_index=SP.getRec_string().indexOf("2C", 29);
-					String index=SP.getRec_string().substring(begin_index, end_index);
-					System.out.println("读取的号码是："+index);
-					if(Read_MMS(index))
-					{
-						System.out.println("读取成功！");
-					}
-					else {
-						System.out.println("读取错误！");
-					}
-					SP.setRec_string("");
-				}
-				else {
-					//System.out.println("");
-					continue;
-				}
-			}
-			System.out.println("结束循环");
-			
-	}*/
+	
 	//8、读取彩信MMS并存储至本地文件夹，将路径存入数据库
-	public boolean Read_MMS(String index)
+	public synchronized boolean Read_MMS(String _index)
 	{
+		String index=_index;
 		String ATCMMSEDIT="61742B636D6D73656469743D300D";    //at+cmmsedit=0;
 		SP.write(ATCMMSEDIT, "hex");
 		delay(delay);
 		if (!SP.getRec_string().equals(ATCMMSEDIT+"0D0A4F4B0D0A")) 
 		{
-			System.out.println("设置退出编辑失败！");
+			logerr("设置退出编辑失败！");
 			return false;
 		}
 		boolean b=false;
@@ -343,7 +349,7 @@ public class Sim800AService
 		delay(delay);
 		if (SP.getRec_string().equals(ATCMMSRECV)) 
 		{
-			System.out.println("-------------------等待cmmsrecv回复-------------------");
+			log("-------------------等待cmmsrecv回复-------------------");
 			delay(longlong_delay);
 			if (SP.getRec_string().startsWith("0D0A2B434D4D5352454356"))    //+CMMSRECV
 			{
@@ -351,7 +357,7 @@ public class Sim800AService
 				int tel_bgn_index=temp_dataString.indexOf("22");
 				int tel_end_index=temp_dataString.indexOf("22",tel_bgn_index+2);
 				int date_bgn_index=tel_end_index+6;
-				System.out.println("开始读取彩信");
+				log("开始读取彩信");
 				//System.out.println(temp_dataString.length());
 				//System.out.println(tel_bgn_index);
 				//System.out.println(tel_end_index);
@@ -359,13 +365,24 @@ public class Sim800AService
 				String date=temp_dataString.substring(date_bgn_index, date_bgn_index+20);//获取日期
 				String tel_num=temp_dataString.substring(tel_bgn_index+2,tel_end_index);//获取电话号码
 				String ATCMMSREAD="61742B636D6D73726561643D320D0A";                  //at+cmmsrecv=2
+				SP.setRec_string("");
 				SP.write(ATCMMSREAD, "hex");
+				String origin_data="";
 				//对接收到的流截取数据部分
-				delay(long_delay);
-				String origin_data=SP.getRec_string();
-				DataAnalyseService.MSGDataAnalyse(origin_data, index,tel_num,date);
-				if(DeleteMMS(index))
-				{b=true;}
+				//delay(long_delay);
+				while(true)
+				{
+					delay(delay);
+					if (!"".equals(SP.getRec_string())&&SP.getRec_string().endsWith("0D0A4F4B0D0A"))
+					{
+						origin_data=SP.getRec_string();
+						break;
+					}
+				}
+				DataAnalyseService.MSGDataAnalyse(origin_data,index,tel_num,date);
+				//if(DeleteMMS(index))
+				//{b=true;}
+				b=true;
 			}
 		}
 		
@@ -396,7 +413,7 @@ public class Sim800AService
 		if(SP.getRec_string().equals(atcreg+"0D0A2B435245473A20302C310D0A0D0A4F4B0D0A")||               //返回数据是1,5即可
 				SP.getRec_string().equals(atcreg+"0D0A2B435245473A20302C350D0A0D0A4F4B0D0A"))
 		{
-			System.out.println("网络已经注册成功！");
+			log("网络已经注册成功！");
 			//2、 查询模块是否附着 GPRS 网络
 			String _atcgatt="at+cgatt?\r";
 			String atcgatt=StringUtils.str2hexstr(_atcgatt);
@@ -404,7 +421,7 @@ public class Sim800AService
 			delay(delay);
 			if (SP.getRec_string().equals(atcgatt+"0D0A2B43474154543A20310D0A0D0A4F4B0D0A"))     //返回ok
 			{
-				System.out.println("成功附着GPRS网络");
+				log("成功附着GPRS网络");
 				//3、设置APN
 				String _atcstt="at+cstt\r";
 				String atcstt=StringUtils.str2hexstr(_atcstt);
@@ -412,7 +429,7 @@ public class Sim800AService
 				delay(delay);
 				if(SP.getRec_string().equals(atcstt+"0D0A4F4B0D0A"))              //返回ok
 				{
-					System.out.println("设置APN成功");
+					log("设置APN成功");
 					//4、激活移动场景
 					String _atciicr="at+ciicr\r";
 					String atciicr=StringUtils.str2hexstr(_atciicr);
@@ -420,26 +437,40 @@ public class Sim800AService
 					delay(delay);
 					if (SP.getRec_string().equals(atciicr+"0D0A4F4B0D0A"))                     //返回ok
 					{
-						System.out.println("移动场景已经激活！");
+						log("移动场景已经激活！");
 						b=true;
 					}
 					else{
-						System.err.println("移动场景激活失败！");
+						logerr("移动场景激活失败！");
 					}
 				}
 				else
 				{
-					System.err.println("设置APN失败，请重试！");
+					logerr("设置APN失败，请重试！");
 				}
 			}
 			else {
-				System.err.println("模块未附着gprs网络，请重试！");
+				logerr("模块未附着gprs网络，请重试！");
 			}
 			
 		}
 		else
 		{
-			System.err.println("网络未注册。。。请注册");
+			logerr("网络未注册。。。请注册");
+		}
+		return b;
+	}
+	//对时操作
+	private boolean CheckDate(String terminal_Month,String terminal_Day)
+	{
+		boolean b=false;
+		Date date=new Date();
+		DateFormat format_month=new SimpleDateFormat("MM");
+		DateFormat format_day=new SimpleDateFormat("dd");
+		String local_month=format_month.format(date);
+		String local_day=format_day.format(date);
+		if (local_month.equals(terminal_Month)&&local_day.equals(terminal_Day)) {
+			b=true;
 		}
 		return b;
 	}
@@ -454,7 +485,19 @@ public class Sim800AService
 			e.printStackTrace();
 		}
 	}
-	
+	//log函数
+	private void log(String msg)
+	{
+		DateFormat format=new SimpleDateFormat("YY-MM-dd HH:mm:ss");
+		String time=format.format(new Date());
+		System.out.println(time+"--> "+msg);
+	}
+	private void logerr(String msg)
+	{
+		DateFormat format=new SimpleDateFormat("YY-MM-dd HH:mm:ss");
+		String time=format.format(new Date());
+		System.err.println(time+"--> "+msg);
+	}
  }
 
 

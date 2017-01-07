@@ -49,16 +49,19 @@ public class sqltest {
 //		 //System.out.println("start!");
 //		 System.out.println(mdb.getId()+"\t"+mdb.getTerminal_id()+"\t"+mdb.getImg_path()+"\t"+mdb.getMsg_path()+"\t"+mdb.getDate());
 //	 }
-	// ArrayList<Terminal_Dev_Bean> tdblst=new Terminal_Dev_Dao().Search(2,"\"002\"");
-	ArrayList<Msg_Title_Bean> lst=new ArrayList<Msg_Title_Bean>();
-	lst=new Msg_Title_Dao().Search("MMS");
-	if (lst.size()==0) {
-		System.out.println("NULL");
-	}
-	for(Msg_Title_Bean mtb:lst)
-	{
-		System.out.println(mtb.getId()+"\t"+mtb.getnum()+"\t"+mtb.getType()+"\t"+mtb.isRead());
-	}
+	 DeviceInfoBean dib= new DeviceInfoBean();
+	 String terminal_id="004";
+	 String battery="31%";
+	 String voltage="2.8v";
+	 String workstate="normal";
+	 String date="17/1/9";
+     dib.setTerminal_id(terminal_id);
+     dib.setBattery(battery);
+     dib.setVoltage(voltage);
+     dib.setWorkstate(workstate);
+     dib.setDate(date);
+     new Device_Info_Dao().add(dib);
+	 System.out.println("OK");
 	
 	 
 	 

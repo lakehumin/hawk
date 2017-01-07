@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.cyt.Bean.Msg_Data_Bean;
+import com.lake.common_utils.db_utils.SqlConnectionPool;
 import com.lake.common_utils.db_utils.SqlHelper;
 
 public class msg_data_Dao {
@@ -20,7 +21,6 @@ public class msg_data_Dao {
 		hmp.put(3,"msg_path");
 		hmp.put(4,"img_path");
 		hmp.put(5, "date");
-		SqlHelper.init();
 	}
 	//Ôö
 	public boolean add(Msg_Data_Bean mdb) 
@@ -74,7 +74,7 @@ public class msg_data_Dao {
 			e.printStackTrace();
 		}
 		finally{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return mdb_lst;
 	}
@@ -98,9 +98,8 @@ public class msg_data_Dao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		finally
-		{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+		finally{
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return mdb;
 	}

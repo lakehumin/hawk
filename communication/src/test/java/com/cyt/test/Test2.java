@@ -9,6 +9,7 @@ import com.cyt.Service.DataAnalyseService;
 import com.cyt.Service.Sim800AService;
 
 import java.io.*;
+import java.util.Date;
 
 public class Test2
 {
@@ -16,6 +17,8 @@ public class Test2
 	        
 	    
 		SerialPortBean SPB=new SerialPortBean();
+		//SPB.listPort();
+		//System.out.println(new Date()+" --> "+"helo");
 		SPB.selectPort("COM8");
 		SPB.startRead(0);
 		/*
@@ -38,23 +41,19 @@ public class Test2
 		//String msg="hello cjs!";
 		final Sim800AService s800service=new Sim800AService();
 		s800service.setSP(SPB);
-		
-		 //测试接受短信
-		
-		/*
+		 //测试接受短信		
+//		
 		Thread read_thread=new Thread()
 		{
 			public void run() {
 				s800service.Wait_For_Message();
 			}
 		};
-//		if (s800service.CheckAT()) {
-//			read_thread.start();
-//		}
-		read_thread.start();*/
-		
+		read_thread.start();
+		s800service.Read_MMS("3037");
+		//s800service.Read_MMS("3037");
 		//开启读取线程
-		
+		/*
 		new Thread(){
 				public void run()
 				{

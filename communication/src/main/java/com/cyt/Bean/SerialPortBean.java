@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.TooManyListenersException;
 
@@ -30,14 +33,6 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 		}
 		public void setRec_byte(byte[] rec_byte) {
 			this.rec_byte = rec_byte;
-		}
-		public String getSign()
-		{
-			return sign;
-		}
-		public void setSign(String sign)
-		{
-			this.sign = sign;
 		}
 		public void setRec_string(String rec_string)
 		{
@@ -151,6 +146,10 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 				
 				try{
 					serialPort = (SerialPort)commPort.open(appName, timeout);
+					 serialPort.setSerialPortParams(115200,  //波特率  
+			                    SerialPort.DATABITS_8,          //校验位  
+			                    SerialPort.STOPBITS_1,          //数据位  
+			                    SerialPort.PARITY_NONE);        //停止位  
 					log("实例 SerialPort 成功！");
 					sign+="实例 SerialPort 成功！";
 				}catch(PortInUseException e){
@@ -158,6 +157,9 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 					throw new RuntimeException(String.format("端口'%1$s'正在使用中！", 
 							commPort.getName()));
 					
+				} catch (UnsupportedCommOperationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -264,8 +266,11 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 		}
 		
 		
-		public void log(String msg){
-			System.out.println(appName+" --> "+msg);
+		private void log(String msg)
+		{
+			DateFormat format=new SimpleDateFormat("YY-MM-dd HH:mm:ss");
+			String time=format.format(new java.util.Date());
+			System.out.println(time+"--> "+msg);
 		}
 
 	@Override
@@ -318,9 +323,9 @@ public class SerialPortBean implements Runnable, SerialPortEventListener {
 		}
 		rec_string=byte2string(rec_byte);
 		//hasnew=true;
-		System.out.println("转换成功！");
+		//System.out.println("转换成功！");
 		//System.out.println(rec_byte);
-		System.out.println("rec_string= "+rec_string);
+		log("rec_string= "+rec_string);
 	}
 		public void run() {
 			try{

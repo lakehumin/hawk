@@ -3,14 +3,12 @@ package com.cyt.DAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import com.cyt.Bean.Msg_Title_Bean;
+import com.lake.common_utils.db_utils.SqlConnectionPool;
 import com.lake.common_utils.db_utils.SqlHelper;
 
 public class Msg_Title_Dao {
-	public Msg_Title_Dao() 
-	{
-		SqlHelper.init();
-	}
 	//Ôö
 	public boolean add(Msg_Title_Bean mtb) 
 	{
@@ -55,7 +53,7 @@ public class Msg_Title_Dao {
 				mtb.setnum(rs.getString(2));
 				mtb.setType(rs.getString(3));
 				mtb.setRead(rs.getBoolean(4)); 
-				System.out.println(rs.getInt(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3)+"\t"+rs.getBoolean(4));
+				//System.out.println(rs.getInt(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3)+"\t"+rs.getBoolean(4));
 				mtb_lst.add(mtb);
 			}
 		} catch (SQLException e) {
@@ -63,7 +61,7 @@ public class Msg_Title_Dao {
 			e.printStackTrace();
 		}
 		finally{
-			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getSqlConnection().getConnection());
+			SqlHelper.close(rs, SqlHelper.getpPreparedStatement(), SqlHelper.getConnection());
 		}
 		return mtb_lst;
 	}
