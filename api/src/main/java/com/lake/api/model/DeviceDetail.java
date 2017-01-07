@@ -1,5 +1,7 @@
 package com.lake.api.model;
 
+import java.sql.Date;
+
 /**
  * @author LakeHm
  *
@@ -13,6 +15,7 @@ public class DeviceDetail {
 	private String battery;
 	private String voltage;
 	private String workstate;
+	private Date date;
 	
 	public String getId() {
 		return id;
@@ -55,5 +58,11 @@ public class DeviceDetail {
 	}
 	public void setWorkstate(String workstate) {
 		this.workstate = workstate;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }

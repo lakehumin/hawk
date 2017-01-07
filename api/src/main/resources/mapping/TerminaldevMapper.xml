@@ -13,4 +13,20 @@
     from terminal_dev
     order by terminal_id
   </select>
+  <delete id="deleteById">
+    delete from terminal_dev
+    where terminal_id = #{id}
+  </delete>
+  <update id="update">
+    update terminal_dev
+    set tel_num = #{tel_num},
+    location = #{location}
+    where terminal_id = #{terminal_id}
+  </update>
+  <insert id="insert" parameterType="com.lake.api.model.Terminaldev" >
+    insert into terminal_dev (terminal_id, tel_num, location, 
+      islinked)
+    values (#{terminal_id}, #{tel_num}, #{location}, 
+      #{islinked})
+  </insert>
 </mapper>

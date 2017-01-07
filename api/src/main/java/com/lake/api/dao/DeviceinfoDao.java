@@ -1,5 +1,9 @@
 package com.lake.api.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.lake.api.model.Deviceinfo;
 
 /**
@@ -10,4 +14,6 @@ import com.lake.api.model.Deviceinfo;
 public interface DeviceinfoDao {
 
 	Deviceinfo searchById(String id);
+	
+	List<Deviceinfo> searchHistoryById(@Param("id")String id, @Param("date")String date);
 }

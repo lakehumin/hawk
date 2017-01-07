@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lake.api.dao.DeviceDetailDao" >
+  <select id="searchAllDeviceDetail" resultType="com.lake.api.model.DeviceDetail">
+    select 
+    deviceinfo.terminal_id as id,tel_num as tel,location,islinked as state,battery,voltage,workstate,date
+    from deviceinfo left join terminal_dev on deviceinfo.terminal_id = terminal_dev.terminal_id
+    WHERE DATE = (select max(date) - FLOOR(RAND()*7) from deviceinfo)
+  </select>
+  <select id="searchDeviceDetailById" resultType="com.lake.api.model.DeviceDetail">
+    select 
+    deviceinfo.terminal_id as id,tel_num as tel,location,islinked as state,battery,voltage,workstate,date
+    from deviceinfo left join terminal_dev on deviceinfo.terminal_id = terminal_dev.terminal_id
+    WHERE DATE = (select max(date) from deviceinfo) and deviceinfo.terminal_id = #{id}
+  </select>
+</mapper>

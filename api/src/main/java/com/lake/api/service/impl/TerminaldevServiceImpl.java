@@ -31,4 +31,19 @@ public class TerminaldevServiceImpl implements TerminaldevService {
 	public List<Terminaldev> getAllTerminalInfo() {
 		return terminaldevDao.searchAllInfo();
 	}
+	
+	@Override
+	public void deleteTerminalById(String id) {
+		terminaldevDao.deleteById(id);
+	}
+	
+	@Override
+	public void updateTerminalInfo(Terminaldev t) {
+		terminaldevDao.update(t);
+	}
+	
+	@Override
+	public void insertTerminal(Terminaldev t) {
+		terminaldevDao.insert(t);
+	}
 }

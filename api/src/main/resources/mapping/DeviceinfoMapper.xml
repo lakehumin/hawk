@@ -5,6 +5,13 @@
     select 
     *
     from deviceinfo
-    where terminal_id = #{id}
+    where terminal_id = #{id} and date = curdate()
+  </select>
+  <select id="searchHistoryById" resultType="com.lake.api.model.Deviceinfo">
+  	select 
+    *
+    from deviceinfo
+    where terminal_id = #{id} and date >= #{date}
+    order by date
   </select>
 </mapper>

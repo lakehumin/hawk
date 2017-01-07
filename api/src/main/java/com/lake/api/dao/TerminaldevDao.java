@@ -13,4 +13,10 @@ public interface TerminaldevDao {
 	Terminaldev searchById(String id);
 	
 	List<Terminaldev> searchAllInfo();
+	
+	void deleteById(String id);
+	
+	void update(Terminaldev t);
+	
+	void insert(Terminaldev t);
 }

@@ -16,6 +16,8 @@ public class BaseWeb {
 
 	public void print(HttpServletResponse response, Object o) throws IOException {
 		response.setHeader("Access-Control-Allow-Origin", "*");		//解决跨域问题
+//		response.setHeader("content-type","text/html;charset=UTF-8");	//解决中文乱码
+		response.setCharacterEncoding("UTF-8"); 	//同上，这是另一种可取方案
 		PrintWriter pw = response.getWriter();
 		pw.write(JSON.toJSONString(o));
 	}

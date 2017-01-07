@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lake.api.dao.DeviceMonitorDao" >
+  <select id="searchById" resultType="com.lake.api.model.DeviceMonitor">
+    select 
+    *
+    from msg_data
+    where terminal_id = #{id} and date = #{date}
+  </select>
+  <select id="searchHistoryById" resultType="com.lake.api.model.DeviceMonitor">
+  	select 
+    *
+    from msg_data
+    where terminal_id = #{id} and date >= #{date}
+    order by date
+  </select>
+</mapper>

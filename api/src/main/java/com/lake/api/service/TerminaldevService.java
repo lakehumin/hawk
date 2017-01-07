@@ -14,4 +14,10 @@ public interface TerminaldevService {
 	Terminaldev getTerminalInfo(String id);
 	
 	List<Terminaldev> getAllTerminalInfo();
+
+	void deleteTerminalById(String id);
+	
+	void updateTerminalInfo(Terminaldev t);
+	
+	void insertTerminal(Terminaldev t);
 }
