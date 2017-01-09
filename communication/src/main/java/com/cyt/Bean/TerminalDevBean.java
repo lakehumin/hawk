@@ -1,14 +1,13 @@
 package com.cyt.Bean;
 
-public class Terminal_Dev_Bean {
+public class TerminalDevBean {
 	private int id;
 	private String terminal_id;
 	private String tel_num;
 	private String location;
-	//private boolean isnomal;
 	private boolean islinked;
-	public Terminal_Dev_Bean(){}
-	public Terminal_Dev_Bean(String terminal_id,String tel_num,String location,boolean islinked)
+	public TerminalDevBean(){}
+	public TerminalDevBean(String terminal_id,String tel_num,String location,boolean islinked)
 	{
 		this.terminal_id=terminal_id;
 		this.tel_num=tel_num;

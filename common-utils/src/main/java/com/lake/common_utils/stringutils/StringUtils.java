@@ -22,8 +22,8 @@ public class StringUtils {
     }
   //byte转string
   	 public  static String byte2string(byte[] data){
-  		    if(data==null||data.length<=1) return "0x1";
-  		    if(data.length>8000000) return "0x2";
+  		    if(data==null||data.length<=1) return "";
+  		    if(data.length>8000000) return "";
   		    StringBuffer sb = new StringBuffer();
   		    int buf[] = new int[data.length];
   		    //byte数组转化成十进制
@@ -60,6 +60,7 @@ public class StringUtils {
   	        ByteArrayOutputStream out = new ByteArrayOutputStream(buffSize);  
   	        byte[] temp = new byte[buffSize];  
   	        int size = bufin.read(temp);  
+  	        //System.out.println(size);
   	        while (size!=-1) {  
   	            out.write(temp, 0, size);
   	            //size=bufin.read(temp);

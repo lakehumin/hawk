@@ -8,26 +8,25 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.cyt.Bean.Msg_Title_Bean;
-import com.cyt.Bean.Terminal_Dev_Bean;
-import com.cyt.DAO.Terminal_Dev_Dao;
-import com.cyt.DAO.msg_data_Dao;
+import com.cyt.Bean.MsgTitleBean;
+import com.cyt.Bean.TerminalDevBean;
+import com.cyt.DAO.TerminalDevDao;
+import com.cyt.DAO.MsgDataDao;
 import com.cyt.Service.DataAnalyseService;
 import com.lake.common_utils.stringutils.StringUtils;
 
 public class CommunicationTest {
 	static private HashMap<String, String> tel_TidMap=new HashMap<String, String>();
 	static{	
-	Terminal_Dev_Dao tdo=new Terminal_Dev_Dao();
-	ArrayList<Terminal_Dev_Bean> tdblst=tdo.SearchAll();
+	TerminalDevDao tdo=new TerminalDevDao();
+	ArrayList<TerminalDevBean> tdblst=tdo.SearchAll();
 	for(int i=0;i<tdblst.size();i++)
 	{
 		tel_TidMap.put(tdblst.get(i).getTerminal_id(),tdblst.get(i).getTel_num());
 	}
 	}
 	public static void main(String[] args)
-	{
-		
+	{	
 		Thread thread1=new Thread()
 		{
 			public void run()
@@ -64,10 +63,10 @@ public class CommunicationTest {
 			}
 		};
 		thread1.start();
-		thread2.start();
-		thread3.start();
-		thread4.start();
-		thread5.start();
+		//thread2.start();
+		//thread3.start();
+		//thread4.start();
+		//thread5.start();
 	}
 	public static void SendMsg(String terminal_id)
 	{

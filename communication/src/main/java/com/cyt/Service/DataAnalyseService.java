@@ -2,43 +2,45 @@ package com.cyt.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
-
-import javax.imageio.stream.FileImageOutputStream;
-import javax.swing.JApplet;
-import javax.swing.Spring;
-
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import com.cyt.Bean.AlarmEventBean;
 import com.cyt.Bean.DeviceInfoBean;
-import com.cyt.Bean.Msg_Data_Bean;
-import com.cyt.Bean.Msg_Title_Bean;
-import com.cyt.Bean.SerialPortBean;
-import com.cyt.Bean.Terminal_Dev_Bean;
-import com.cyt.DAO.Device_Info_Dao;
-import com.cyt.DAO.Msg_Title_Dao;
-import com.cyt.DAO.Terminal_Dev_Dao;
-import com.cyt.DAO.msg_data_Dao;
+import com.cyt.Bean.MsgDataBean;
+import com.cyt.Bean.MsgTitleBean;
+import com.cyt.Bean.TerminalDevBean;
+import com.cyt.DAO.AlarmEventDao;
+import com.cyt.DAO.DeviceInfoDao;
+import com.cyt.DAO.MsgTitleDao;
+import com.cyt.DAO.TerminalDevDao;
+import com.cyt.DAO.MsgDataDao;
 import com.lake.common_utils.stringutils.StringUtils;
 
 public class DataAnalyseService {
 	//private static byte[] buffer=null;
-	private static HashMap<String, String> tel_TidMap=null;
-	static{
-		tel_TidMap=new HashMap<String, String>();
-		Terminal_Dev_Dao tdo=new Terminal_Dev_Dao();
-		ArrayList<Terminal_Dev_Bean> tdblst=tdo.SearchAll();
-		for (Terminal_Dev_Bean tdb : tdblst) {
+	private static DualHashBidiMap tel_TidMap=null;
+	private static boolean isinit=false;
+	private static void init(){
+		tel_TidMap=new DualHashBidiMap();
+		TerminalDevDao tdo=new TerminalDevDao();
+		ArrayList<TerminalDevBean> tdblst=tdo.SearchAll();
+		for (TerminalDevBean tdb : tdblst) {
 			tel_TidMap.put(tdb.getTel_num(), tdb.getTerminal_id());
 		}
-		
+		isinit=true;
 		}
-	
+	private static void checkinit()
+	{
+		if (!isinit) {
+			init();
+		}
+		else {
+			return;
+		}
+	}
 	public static byte[] List2Array(ArrayList<Byte> array)
 	{
 		byte[] Buffer=new byte[array.size()];
@@ -51,12 +53,13 @@ public class DataAnalyseService {
 	//获取Wait_For_Message()函数中的短信属性并将其存入数据库，用于迟滞的统一读取和解析。
 	public static boolean SaveMsgTitle(String index,String type)
 	{
+		checkinit();
 		boolean b=false;
-		Msg_Title_Bean mtb=new Msg_Title_Bean();
+		MsgTitleBean mtb=new MsgTitleBean();
 		mtb.setnum(index);
 		mtb.setType(type);
 		mtb.setRead(false);
-		if(new Msg_Title_Dao().add(mtb))
+		if(new MsgTitleDao().add(mtb))
 		{
 			b=true;
 		}
@@ -65,9 +68,10 @@ public class DataAnalyseService {
 	//扫描数据库中MsgTitle表中的数据，并依此对短信做读取。
 	public static void ReadStoredMsg(Sim800AService s800 )
 	{
-		Msg_Title_Dao mtd=new Msg_Title_Dao();
+		checkinit();
+		MsgTitleDao mtd=new MsgTitleDao();
 		//读取短信格式的消息
-		ArrayList<Msg_Title_Bean> text_lst=null;
+		ArrayList<MsgTitleBean> text_lst=null;
 		text_lst=mtd.Search("Text");
 		if(text_lst.size()!=0)
 		{
@@ -87,7 +91,7 @@ public class DataAnalyseService {
 			log("存储中无文本短信");
 		}
 		//读取彩信格式的短消息
-		ArrayList<Msg_Title_Bean> mms_lst=null;
+		ArrayList<MsgTitleBean> mms_lst=null;
 		mms_lst=mtd.Search("MMS");
 		if (mms_lst.size()!=0) 
 		{
@@ -120,11 +124,12 @@ public class DataAnalyseService {
 	//处理text短信的内容
 	public static void TextAnalyse(String msg,String tel,String date)
 	{
-		Device_Info_Dao did=new Device_Info_Dao();
-		Terminal_Dev_Dao tdd=new Terminal_Dev_Dao();
+		checkinit();
+		DeviceInfoDao did=new DeviceInfoDao();
+		TerminalDevDao tdd=new TerminalDevDao();
 		String telnum="'"+new String(StringUtils.hexStringToByte(tel))+"'";
 		log("telnum="+telnum);
-		ArrayList<Terminal_Dev_Bean> temp=tdd.Search(3,telnum);
+		ArrayList<TerminalDevBean> temp=tdd.Search(3,telnum);
 		if (msg.startsWith("01"))
 		{
 			//01代表收到的是设备信息
@@ -132,11 +137,12 @@ public class DataAnalyseService {
 			log("battery="+battery);
 			String voltage=Integer.parseInt(msg.substring(6,7),16)+""+"."+Integer.parseInt(msg.substring(7, 8),16);
 			log("voltage="+voltage);
-			String workstate=getworkstate(msg.substring(8,10));
+			String workstate=getWorkstate(msg.substring(8,10));
 			log("workstate="+workstate);	
 			for (int i = 0; i < temp.size(); i++) 
 			{
 			     String terminal_id=temp.get(i).getTerminal_id();
+			     System.out.println("terminal_id="+terminal_id);
 			     //向数据库添加新纪录
 			     DeviceInfoBean dib= new DeviceInfoBean();		    
 			     dib.setTerminal_id(terminal_id);
@@ -145,6 +151,7 @@ public class DataAnalyseService {
 			     dib.setWorkstate(workstate);
 			     dib.setDate(date);
 			     did.add(dib);
+			     HandleEvent(workstate,terminal_id);
 		   }
 	   }
 		else if (msg.startsWith("02")) 
@@ -199,27 +206,21 @@ public class DataAnalyseService {
 			log(temp.get(0).getTerminal_id()+"收到非终端短信 "+msg);
 		}
 	}
-	//处理gprs裸数据()
+	//处理gprs数据头()
 	public static void GPRSDataAnalyse(String rec)
 	{
-		if(rec.startsWith("3F"))
-		{
-			int devnum=Integer.parseInt(rec.substring(2,4),16);	
-			String devString=String.valueOf(devnum);
-			String msg_Date=new String(StringUtils.hexStringToByte(rec.substring(4,20)));
-			String origin=new String(StringUtils.hexStringToByte(rec.substring(20,rec.length()-4)));
-			log("设备编号是："+devString);
-			log("发送日期是："+msg_Date);
-			log("原始数据是："+origin);	
-		}
-		else 
-		{
-			logerr("信息有误，请重发。。。");
-		}
+		checkinit();
+		String terminal_id=rec.substring(0,3);
+		String date=rec.substring(3,11);
+		String msg=rec.substring(11);
+		String telhex=StringUtils.str2hexstr((String)tel_TidMap.getKey(terminal_id));
+		System.out.println(terminal_id+"\t"+date+"\t"+msg+"\t"+tel_TidMap.getKey(terminal_id)+"\t");
+		TextAnalyse(msg, telhex, date);
 	}
 	//与前端的通信
 	public static String TCPDataAnalyse(String rec,Sim800AService s800)
 	{
+		checkinit();
 		String Msg="";
 		if (rec.startsWith("02")) {
 			Msg="02";
@@ -228,7 +229,7 @@ public class DataAnalyseService {
 			String terminal_id=rec.substring(2,6);
 			String cmd=rec.substring(6,8);
 			String content=rec.substring(8);
-			if(s800.Send_Message(tel_TidMap.get(terminal_id),Set_English_MSG(cmd, content)))
+			if(s800.Send_Message((String)tel_TidMap.get(terminal_id),Set_English_MSG(cmd, content)))
 			{
 				Msg=rec+"01";
 			}
@@ -241,24 +242,24 @@ public class DataAnalyseService {
 	//处理MMS裸数据并保存到本地
 	public static void MSGDataAnalyse(String origin_data,String index,String tel_num,String _date)
 	{
+		checkinit();
 		log("MMS数据处理。。。");
 		int bgn_index=origin_data.indexOf("0D0A", 38)+4;
 		int end_index=origin_data.length()-12;
 		String new_data=origin_data.substring(bgn_index,end_index);
 		String dateString=new String(StringUtils.hexStringToByte(_date));
 		String telsString=new String(StringUtils.hexStringToByte(tel_num));
-		byte[] num=StringUtils.hexStringToByte(index);
-		String Num=new String(num);
 		String path="D:\\SerialPort_MSG\\"+tel_TidMap.get(telsString)+"_"+dateString+".png";
 		saveToImgFile(new_data, path);
 		Date date=getDate(dateString);
-		Msg_Data_Bean mdb=new Msg_Data_Bean(tel_TidMap.get(telsString),null,path,date);
-		new msg_data_Dao().add(mdb);
+		MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),path,date);
+		new MsgDataDao().add(mdb);
 		log("MMS处理完毕");
 	}
 	//设置英文短信的发送格式
 	public static String Set_English_MSG(String cmd,String content)
 	{
+		checkinit();
 		String Msg="";
 		if ("01".equals(cmd)) {
 			Msg="01";
@@ -280,6 +281,7 @@ public class DataAnalyseService {
 	//设置中文短信的发送信息格式
 	public static String Set_CHINESE_MSG(String msg,String phoneNum)
 	{
+		checkinit();
 		String length;
 		String telString="";
 		length="0D"; 
@@ -357,6 +359,7 @@ public class DataAnalyseService {
 		return val;
 	}
 	//生成java.sql.date类型的数据
+	@SuppressWarnings("deprecation")
 	public  static Date getDate(String dateString)
 	{
 		Date date;
@@ -366,8 +369,8 @@ public class DataAnalyseService {
 		date=new Date(year,month,day);
 		return date;
 	}
-	//工作状态映射
-	private static String getworkstate(String index)
+	//工作状态反馈和处理
+	private static String getWorkstate(String index)
 	{
 		if ("01".equals(index)) 
 		{
@@ -380,10 +383,45 @@ public class DataAnalyseService {
 			return "VolAbnormal";
 		}
 		else if ("04".equals(index)) {
-			return "Destroyed";
+			return "Broken";
 		}
 		else {
 			return "Exception";
+		}
+	}
+	//处理设备异常信息，上传前端（以数据库的方式）
+	public static void HandleEvent(String event,String terminal_id)
+	{
+		if ("Normal".equals(event)) {
+			return;
+		}
+		String undeal="0";
+		String underdealing="1";
+		int count=0;
+		AlarmEventDao aedao=new AlarmEventDao();
+		ArrayList<AlarmEventBean> undeallst=aedao.Search(terminal_id, undeal);
+		ArrayList<AlarmEventBean> underdeallst=aedao.Search(terminal_id, underdealing);
+		//.......检索记录在案的未处理完毕的异常记录，若与本次的异常不同，则进行记录，否则不予记录。
+		for (int i = 0; i < undeallst.size(); i++) {
+			if (undeallst.get(i).getEvent().equals(event)) {
+				count++;
+			}
+		}
+		for (int i = 0; i < underdeallst.size(); i++) {
+			if (underdeallst.get(i).getEvent().equals(event)) {
+				count++;
+			}
+		}
+		System.out.println("count= "+count);
+		//上述操作  每次检索出与此次的异常相同 则count递增，只有count=0时，才能说明无相同异常事件，此时可以添加记录  
+		if (count==0) {
+			DateFormat format=new SimpleDateFormat("YY-MM-dd");
+			String eventdate=format.format(new java.util.Date());
+			AlarmEventBean alarm=new AlarmEventBean();
+			alarm.setTerminal_id(terminal_id);
+			alarm.setEvent(event);
+			alarm.setEventdate(eventdate);
+			aedao.add(alarm);
 		}
 	}
 	//log函数

@@ -1,12 +1,12 @@
 package com.cyt.Bean;
 
-public class Msg_Title_Bean {
+public class MsgTitleBean {
 private int id;
 private String num;
 private String type;
 private boolean isRead;
-public Msg_Title_Bean(){}
-public Msg_Title_Bean(String num,String type,boolean isRead)
+public MsgTitleBean(){}
+public MsgTitleBean(String num,String type,boolean isRead)
 {
 	this.num=num;
 	this.type=type;

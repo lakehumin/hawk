@@ -4,16 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.cyt.Bean.Terminal_Dev_Bean;
-import com.cyt.Bean.Terminal_Dev_Bean;
-import com.lake.common_utils.db_utils.SqlConnectionPool;
+import com.cyt.Bean.TerminalDevBean;
 import com.lake.common_utils.db_utils.SqlHelper;
 
-public class Terminal_Dev_Dao {
+public class TerminalDevDao {
 	private HashMap<Integer,String> hmp;
 	//初始化 hash映射
-	public Terminal_Dev_Dao() 
+	public TerminalDevDao() 
 	{
 		hmp=new HashMap<Integer, String>();
 		hmp.put(1, "id");
@@ -23,7 +20,7 @@ public class Terminal_Dev_Dao {
 		hmp.put(5, "islinked");
 	}
 	//增
-	public boolean add(Terminal_Dev_Bean tdb) 
+	public boolean add(TerminalDevBean tdb) 
 	{
 		boolean b=false;
 		String sql="insert into terminal_dev(terminal_id,tel_num,location,islinked) values(?,?,?,?)";
@@ -42,7 +39,7 @@ public class Terminal_Dev_Dao {
 		return b;
 	}
 	//改
-	public boolean update(Terminal_Dev_Bean tdb)
+	public boolean update(TerminalDevBean tdb)
 	{
 		boolean b=false;
 		String sql="update terminal_dev set tel_num=?,location=?,islinked=? where terminal_id=?";
@@ -52,16 +49,16 @@ public class Terminal_Dev_Dao {
 		return b;
 	}
 	//查询某一项属性 例如：连接状态、工作状态
-	public ArrayList<Terminal_Dev_Bean> Search(int key,String content)
+	public ArrayList<TerminalDevBean> Search(int key,String content)
 	{
-		ArrayList<Terminal_Dev_Bean> tdb_lst=new ArrayList<Terminal_Dev_Bean>();
+		ArrayList<TerminalDevBean> tdb_lst=new ArrayList<TerminalDevBean>();
 		String sql="select *from terminal_dev where "+hmp.get(key)+"="+content;
 		//String parameters[]={content};
 		ResultSet rs=SqlHelper.executeQuery(sql, null);
 		try {
 			while(rs.next())
 			{
-				Terminal_Dev_Bean tdb=new Terminal_Dev_Bean();
+				TerminalDevBean tdb=new TerminalDevBean();
 				tdb.setId(rs.getInt(1));
 				tdb.setTerminal_id((rs.getString(2)));
 				tdb.setTel_num(rs.getString(3));
@@ -79,21 +76,23 @@ public class Terminal_Dev_Dao {
 		return tdb_lst;
 	}
 	//查询表中所有成员
-	public ArrayList<Terminal_Dev_Bean> SearchAll()
+	public ArrayList<TerminalDevBean> SearchAll()
 	{
-		ArrayList<Terminal_Dev_Bean> tdb_lst=new ArrayList<Terminal_Dev_Bean>();
+		ArrayList<TerminalDevBean> tdb_lst=new ArrayList<TerminalDevBean>();
 		String sql="select *from terminal_dev";
 		//String parameters[]={content};
 		ResultSet rs=SqlHelper.executeQuery(sql, null);
+		System.out.println("start search");
 		try {
 			while(rs.next())
 			{
-				Terminal_Dev_Bean tdb=new Terminal_Dev_Bean();
+				TerminalDevBean tdb=new TerminalDevBean();
 				tdb.setId(rs.getInt(1));
 				tdb.setTerminal_id((rs.getString(2)));
 				tdb.setTel_num(rs.getString(3));
 				tdb.setLocation(rs.getString(4));
-				tdb.setIslinked(rs.getBoolean(5)); 		
+				tdb.setIslinked(rs.getBoolean(5)); 	
+				System.out.println(tdb.getTerminal_id()+"\t"+tdb.getTel_num());
 				tdb_lst.add(tdb);
 			}
 		} catch (SQLException e) {
@@ -106,9 +105,9 @@ public class Terminal_Dev_Dao {
 		return tdb_lst;
 	}
 	//查询某一个id的记录
-	public Terminal_Dev_Bean Searchid(String terminal_id)
+	public TerminalDevBean Searchid(String terminal_id)
 	{
-		Terminal_Dev_Bean tdb=new Terminal_Dev_Bean();
+		TerminalDevBean tdb=new TerminalDevBean();
 		String sql="select *from terminal_dev where terminal_id=?";
 		String parameters[]={terminal_id};
 		ResultSet rs=SqlHelper.executeQuery(sql, parameters);

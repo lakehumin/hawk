@@ -4,16 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import com.cyt.Bean.DeviceInfoBean;
-import com.cyt.Bean.Terminal_Dev_Bean;
-import com.lake.common_utils.db_utils.SqlConnectionPool;
 import com.lake.common_utils.db_utils.SqlHelper;
 
-public class Device_Info_Dao {
+public class DeviceInfoDao {
 	private HashMap<Integer,String> hmp;
 	//≥ı ºªØ hash”≥…‰
-	public Device_Info_Dao() 
+	public DeviceInfoDao() 
 	{
 		hmp=new HashMap<Integer, String>();
 		hmp.put(1, "id");
@@ -67,7 +64,8 @@ public class Device_Info_Dao {
 				dib.setTerminal_id((rs.getString(2)));
 				dib.setBattery(rs.getString(3));
 				dib.setVoltage(rs.getString(4));
-				dib.setWorkstate(rs.getString(5)); 		
+				dib.setWorkstate(rs.getString(5));
+				dib.setDate(rs.getString(6));
 				dib_lst.add(dib);
 			}
 		} catch (SQLException e) {
@@ -93,7 +91,8 @@ public class Device_Info_Dao {
 				dib.setTerminal_id((rs.getString(2)));
 				dib.setBattery(rs.getString(3));
 				dib.setVoltage(rs.getString(4));
-				dib.setWorkstate(rs.getString(5)); 		
+				dib.setWorkstate(rs.getString(5)); 
+				dib.setDate(rs.getString(6));
 			}
 			else {
 				return null;

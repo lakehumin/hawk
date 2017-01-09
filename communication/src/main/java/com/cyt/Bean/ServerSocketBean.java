@@ -4,22 +4,16 @@ import com.cyt.Threads.ServerThread;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 public class ServerSocketBean extends Thread
 {
 	private  ServerSocket seversocket=null;
-	private  Socket client=null;
 	//private final static int port=8080;
-	private  OutputStream os=null;
-	private  InputStream is=null;
 	private int i=0;
-	private int port;
 	private HashMap<Integer,Socket> clientMap=null;
 	public ServerSocketBean(){}
 	public ServerSocketBean(int port)
 	{
-		this.port=port;
 		clientMap=new HashMap<Integer,Socket>();
 		try  
 	    {  
@@ -45,7 +39,7 @@ public class ServerSocketBean extends Thread
 		System.out.println("CHECK false");
 		return false;
 	}
-	public void write(String Message,int num)
+	public  void  write(String Message,int num)
 	{
 		if (clientMap.get(num).isConnected()){
 			try {
