@@ -34,21 +34,31 @@ public class ReceiveThread extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				if (client.isConnected()) {
+				if (client!=null) {
 					byte[] data = StringUtils.readBytes(client.getInputStream());
-					rec += StringUtils.byte2string(data);
-					if (rec.startsWith("0x1")) {
-						System.out.println("当前客户端已经断开连接。。。");
-						break;
+					String buf2=new String(data);
+					String buf=StringUtils.byte2string(data);
+					if ("".equals(buf2)||null==buf2)
+					{
+						rec="";
+						continue;
 					}
+					rec += buf2;
 					int length = rec.length();
-					String CHC = rec.substring(length - 4, length);
-					System.out.println("rec= " + rec);
-					System.out.println("CHA= " + CHC);
-					if (CHC.equals("1A1B")) {
-						DataAnalyseService.GPRSDataAnalyse(rec); 
-						break;
+					//String CHC = rec.substring(length - 4, length);
+					String terminal_id=rec.substring(0,3);
+					String msg=rec.substring(3,length);
+					System.out.println("接收到来自 "+terminal_id+"的消息："+"\t" + msg);
+					if (!"".equals(rec)) {
+						DataAnalyseService.GPRSDataAnalyse(rec);
+						rec="";	
 					}
+					
+//					System.out.println("CHA= " + CHC);
+//					if (CHC.equals("1A1B")) {
+//						DataAnalyseService.GPRSDataAnalyse(rec); 
+//						break;
+//					}
 					
 				}
 				else {

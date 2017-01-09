@@ -2,12 +2,6 @@ package com.cyt.Threads;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.lake.common_utils.stringutils.StringUtils;
 public class SendThread extends Thread{
 
 		BufferedOutputStream out;

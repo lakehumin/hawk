@@ -1,42 +1,60 @@
 package com.lake.common_utils.db_utils;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import com.lake.common_utils.db_utils.SqlConnectionPool.SqlConnection;
 
 public class SqlHelper {
-		//数据库驱动  
-		private static String jdbcDriver = "com.mysql.jdbc.Driver";
-		//数据库url  
-	    private static String dbUrl = "jdbc:mysql://114.212.118.115:3306/hawk";
-	    //数据库ip
-//	    private static String dbIp = "114.212.118.115";
-	    //数据库名称
-//	    private static String dbName = "hawk";
-	    //数据库表名称
-	    private static String dbTableName = "user";
-	    //数据库用户名  
-	    private static String dbUsername = "root";
-	    //数据库密码 
-	    private static String dbPassword = "root";
-	    //数据库连接池
-	    //private static volatile SqlConnectionPool SqlConnectionPool;
 	    private static PreparedStatement ps=null;
 	    private static ResultSet rs=null;
 	    private static Connection ct=null;
-	    static{
-	    	try {
-				Class.forName(jdbcDriver);
-			} catch (ClassNotFoundException e) {
+	    private static String url="";
+		private static String username="";
+		private static String driver="";
+		private static String password="";
+		private static Properties pp=null;
+		private static InputStream fis=null;
+		//加载驱动，只需一次 ，所以用Static方法
+		static
+		{
+			try
+			{
+				//从dbinfo.properties文件中读取配置信息
+				pp=new Properties();
+				fis=SqlHelper.class.getClassLoader().getResourceAsStream("dbinfo.properties");
+				pp.load(fis);
+				url=pp.getProperty("url");
+				username=pp.getProperty("username");
+				driver=pp.getProperty("driver");
+				password=pp.getProperty("password");
+				Class.forName(driver);
+			} catch (Exception e)
+			{
 				e.printStackTrace();
 			}
-	    }
+			finally
+			{
+					try
+					{
+						fis.close();
+					} catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					fis=null;
+			
+			}
+		}
 	    public static Connection getConnection()
 		{
 			try
 			{
-				ct=DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+				ct=DriverManager.getConnection(url, username, password);
 			} catch (SQLException e)
 			{
 				// TODO Auto-generated catch block

@@ -5,17 +5,21 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import org.apache.commons.collections.bidimap.DualTreeBidiMap;
+
+import com.cyt.Bean.AlarmEventBean;
 import com.cyt.Bean.DeviceInfoBean;
-import com.cyt.Bean.Msg_Data_Bean;
-import com.cyt.Bean.Msg_Title_Bean;
-import com.cyt.Bean.Terminal_Dev_Bean;
-import com.cyt.DAO.Device_Info_Dao;
-import com.cyt.DAO.Msg_Title_Dao;
-import com.cyt.DAO.Terminal_Dev_Dao;
-import com.cyt.DAO.msg_data_Dao;
+import com.cyt.Bean.MsgDataBean;
+import com.cyt.Bean.MsgTitleBean;
+import com.cyt.Bean.TerminalDevBean;
+import com.cyt.DAO.AlarmEventDao;
+import com.cyt.DAO.DeviceInfoDao;
+import com.cyt.DAO.MsgTitleDao;
+import com.cyt.DAO.TerminalDevDao;
+import com.cyt.DAO.MsgDataDao;
 import com.cyt.Service.DataAnalyseService;
 import com.lake.common_utils.db_utils.SqlHelper;
-
 public class sqltest {
  public static void main(String []args)
  {
@@ -49,20 +53,20 @@ public class sqltest {
 //		 //System.out.println("start!");
 //		 System.out.println(mdb.getId()+"\t"+mdb.getTerminal_id()+"\t"+mdb.getImg_path()+"\t"+mdb.getMsg_path()+"\t"+mdb.getDate());
 //	 }
-	 DeviceInfoBean dib= new DeviceInfoBean();
-	 String terminal_id="004";
-	 String battery="31%";
-	 String voltage="2.8v";
-	 String workstate="normal";
-	 String date="17/1/9";
-     dib.setTerminal_id(terminal_id);
-     dib.setBattery(battery);
-     dib.setVoltage(voltage);
-     dib.setWorkstate(workstate);
-     dib.setDate(date);
-     new Device_Info_Dao().add(dib);
-	 System.out.println("OK");
-	
+	 String terminal_id="002";
+	 AlarmEventDao aeDao=new AlarmEventDao();
+//	 ArrayList<AlarmEventBean> lst=aeDao.Search(terminal_id, "2");
+//	 for (int i = 0; i < lst.size(); i++) {
+//		System.out.println(lst.get(i).getTerminal_id()+"\t"+lst.get(i).getEvent()+"\t"+lst.get(i).getEventstate());
+//	}
+//	 AlarmEventBean alarmEventBean=new AlarmEventBean();
+//	 alarmEventBean.setTerminal_id("001");
+//	 alarmEventBean.setEvent("LowPower");
+//	 alarmEventBean.setEventdate("2017-1-9");
+//	 aeDao.add(alarmEventBean);
+	 TerminalDevDao tdd=new TerminalDevDao();
+	 TerminalDevBean tdb= tdd.Searchid("001");
+	 System.out.println(tdb.getTerminal_id()+"\t"+tdb.getTel_num()+"\t");
 	 
 	 
  }

@@ -1,19 +1,15 @@
 package com.cyt.Service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.locks.Lock;
-
 import com.cyt.Bean.SerialPortBean;
-import com.cyt.DAO.Msg_Title_Dao;
 import com.lake.common_utils.stringutils.StringUtils;
 
 public class Sim800AService 
 {
 	private SerialPortBean SP=null;
 	private int delay=800;									//定义传输时延是500ms
-	private int long_delay=150*1000;	//大数据接受时延为1.5s  读取彩信大概200k
+	//private int long_delay=150*1000;	//大数据接受时延为1.5s  读取彩信大概200k
 	private int longlong_delay=45*1000;   
 	//private String Message="";
 	private boolean mms_isinit=false;
@@ -81,7 +77,7 @@ public class Sim800AService
 		return b;
 	}
 	//3.1、 发送中文短信（与管理人员进行通信）
-	public synchronized    boolean  Send_Message_toManger(String phoneNum,String Msg)
+	public synchronized   boolean  Send_Message_toManger(String phoneNum,String Msg)
 	{
 		String ATCMGF="41542B434D47463D300D";  //AT+CMGF=0 PDU模式
 		SP.write(ATCMGF, "hex");
@@ -203,7 +199,7 @@ public class Sim800AService
 				byte[] msg=StringUtils.hexStringToByte(Message);
 				String _msg=new String(msg);     
 				log("短信内容是："+_msg);
-				//DataAnalyseService.TextAnalyse(_msg, tel,date);
+				DataAnalyseService.TextAnalyse(_msg, tel,date);
 				b=true   ;
 			}    
 			else {
@@ -481,7 +477,6 @@ public class Sim800AService
 		try {
 			Thread.sleep(delay);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

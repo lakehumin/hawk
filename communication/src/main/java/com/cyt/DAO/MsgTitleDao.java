@@ -4,13 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.cyt.Bean.Msg_Title_Bean;
-import com.lake.common_utils.db_utils.SqlConnectionPool;
+import com.cyt.Bean.MsgTitleBean;
 import com.lake.common_utils.db_utils.SqlHelper;
 
-public class Msg_Title_Dao {
+public class MsgTitleDao {
 	//增
-	public boolean add(Msg_Title_Bean mtb) 
+	public boolean add(MsgTitleBean mtb) 
 	{
 		boolean b=false;
 		String sql="insert into MsgTitle(num,type,isread) values(?,?,?)";
@@ -29,7 +28,7 @@ public class Msg_Title_Dao {
 		return b;
 	}
 	//将短信状态改成已读
-	public boolean update(Msg_Title_Bean mtb)
+	public boolean update(MsgTitleBean mtb)
 	{
 		boolean b=false;
 		String sql="update MsgTitle set isread=? where id=?";
@@ -39,16 +38,16 @@ public class Msg_Title_Dao {
 		return b;
 	}
 	//查询未读的短信或彩信
-	public ArrayList<Msg_Title_Bean> Search(String type)
+	public ArrayList<MsgTitleBean> Search(String type)
 	{
-		ArrayList<Msg_Title_Bean> mtb_lst=new ArrayList<Msg_Title_Bean>();
+		ArrayList<MsgTitleBean> mtb_lst=new ArrayList<MsgTitleBean>();
 		String sql="select *from msgtitle where isread= false and type='"+type+"'";
 		//String parameters[]={content};
 		ResultSet rs=SqlHelper.executeQuery(sql, null);
 		try {
 			while(rs.next())
 			{
-				Msg_Title_Bean mtb=new Msg_Title_Bean();
+				MsgTitleBean mtb=new MsgTitleBean();
 				mtb.setId(rs.getInt(1));
 				mtb.setnum(rs.getString(2));
 				mtb.setType(rs.getString(3));

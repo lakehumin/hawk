@@ -40,9 +40,9 @@ public class Test3 {
 	}
 	public static void main(String []args)
 	{ 
-		DateFormat format=new SimpleDateFormat("YY/MM/dd");
-		String date=format.format(new Date());
-		System.out.println(date);
+		Date now=new Date();
+		int hours=now.getHours();
+		System.out.println(hours);
 	}
 	 
 }
