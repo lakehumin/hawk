@@ -19,13 +19,15 @@
   <update id="update">
     update user
     set password = #{password},
-    type = #{type}
+    type = #{type},
+    tel = #{tel},
+    realname = #{realname}
     where username = #{username}
   </update>
   <insert id="insert" parameterType="com.lake.api.model.User" >
     insert into user (id, username, password, 
-      type)
+      type,realname,tel)
     values (#{id}, #{username}, #{password}, 
-      #{type})
+      #{type},#{realname},#{tel})
   </insert>
 </mapper>

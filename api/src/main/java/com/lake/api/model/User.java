@@ -10,6 +10,9 @@ public class User {
 	private String username;
 	private String password;
 	private String type = "general";
+	private String realname;
+	private String tel;
+	
 	public int getId() {
 		return id;
 	}
@@ -34,4 +37,17 @@ public class User {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getRealname() {
+		return realname;
+	}
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	
 }

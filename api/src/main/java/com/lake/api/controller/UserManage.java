@@ -35,10 +35,14 @@ public class UserManage extends BaseWeb {
     public void add(HttpServletRequest request,HttpServletResponse response) {  
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String realname = request.getParameter("realname");
+		String tel = request.getParameter("tel");
 		
 		User u = new User();
 		u.setUsername(username);
 		u.setPassword(password);
+		u.setRealname(realname);
+		u.setTel(tel);
 		userService.insert(u);
 		BaseResponse br = new BaseResponse();
 		br.setSuccess(true);
@@ -64,7 +68,6 @@ public class UserManage extends BaseWeb {
 	
 	@RequestMapping("/getAll")
     public void getAll(HttpServletRequest request,HttpServletResponse response) {  
-		
 		List<User> userList = userService.getAllUser();
 		try {
 			print(response, userList);
@@ -78,10 +81,14 @@ public class UserManage extends BaseWeb {
     public void update(HttpServletRequest request,HttpServletResponse response) {  
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String realname = request.getParameter("realname");
+		String tel = request.getParameter("tel");
 		
 		User u = new User();
 		u.setUsername(username);
 		u.setPassword(password);
+		u.setRealname(realname);
+		u.setTel(tel);
 		userService.update(u);
 		BaseResponse br = new BaseResponse();
 		br.setSuccess(true);

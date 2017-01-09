@@ -2,7 +2,6 @@ package com.lake.api.controller;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -81,23 +80,23 @@ public class DeviceController extends BaseWeb {
     }
 	
 	//查询设备历史监控照片
-		@RequestMapping("/search/historyimg")
-	    public void searchDeviceHistoryImg(HttpServletRequest request,HttpServletResponse response) {  
-			String id = request.getParameter("id");
-			String date = request.getParameter("date");
-			String d = new Date(Long.parseLong(date)).toString();
-			
-			List<DeviceMonitor> listdm = deviceinfoService.getDeviceHistoryMonitorImg(id, d);
-			BaseResponse br = new BaseResponse();
-			br.setSuccess(true);
-			br.setData(listdm);
-			try {
-				print(response, br);
-			} catch (IOException e) {
-				log.error("response获取pw失败");
-			}
-	        return ;
-	    }
+	@RequestMapping("/search/historyimg")
+    public void searchDeviceHistoryImg(HttpServletRequest request,HttpServletResponse response) {  
+		String id = request.getParameter("id");
+		String date = request.getParameter("date");
+		String d = new Date(Long.parseLong(date)).toString();
+		
+		List<DeviceMonitor> listdm = deviceinfoService.getDeviceHistoryMonitorImg(id, d);
+		BaseResponse br = new BaseResponse();
+		br.setSuccess(true);
+		br.setData(listdm);
+		try {
+			print(response, br);
+		} catch (IOException e) {
+			log.error("response获取pw失败");
+		}
+        return ;
+    }
 	
 	//查询所有设备详细信息
 	@RequestMapping("/search/alldetail")

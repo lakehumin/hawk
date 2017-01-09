@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lake.api.dao.AlarmDao" >
+  <insert id="insert" parameterType="com.lake.api.model.Alarm" >
+    insert into alarm (terminal_id, event, eventdate)
+    values (#{terminal_id}, #{event}, #{eventdate})
+  </insert>
+  <select id="searchAllEvent" resultType="com.lake.api.model.Alarm">
+    select 
+    *
+    from alarm  
+  </select>
+  <select id="searchAllUnHandledEvent" resultType="com.lake.api.model.Alarm">
+    select 
+    *
+    from alarm  
+    WHERE state = 0
+  </select>
+  <select id="searchAllHandlingEvent" resultType="com.lake.api.model.Alarm">
+    select 
+    *
+    from alarm  
+    WHERE state = 1
+  </select>
+  <select id="searchAllHandledEvent" resultType="com.lake.api.model.Alarm">
+    select 
+    *
+    from alarm  
+    WHERE state = 2
+  </select>
+  <select id="searchEventById" resultType="com.lake.api.model.Alarm">
+    select 
+    *
+    from alarm  
+    WHERE id = #{id}
+  </select>
+  <update id="updateBeginHandle">
+    update alarm
+    set user = #{user},
+    begindate = #{begindate},
+    state = #{state}
+    where id = #{id}
+  </update>
+  <update id="updateEndHandle">
+    update alarm
+    set record = #{record},
+    enddate = #{enddate},
+    state = #{state}
+    where id = #{id}
+  </update>
+</mapper>

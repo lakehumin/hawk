@@ -2,9 +2,7 @@ package com.lake.common_utils.web_utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletResponse;
-
 import com.alibaba.fastjson.JSON;
 
 /**
