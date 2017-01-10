@@ -2,6 +2,7 @@ package com.cyt.Service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import com.cyt.Bean.SerialPortBean;
 import com.lake.common_utils.stringutils.StringUtils;
 
@@ -178,10 +179,10 @@ public class Sim800AService
 				String tel=rec.substring(tel_bgnindex,tel_endindex);
 				int month_bgn_index=rec.indexOf("2F")+2;
 				int day_bgn_index=rec.indexOf("2C",month_bgn_index)-6;
-				String date=rec.substring((month_bgn_index)-6,day_bgn_index+4);
+				String date=new String(rec.substring((month_bgn_index)-6,day_bgn_index+4));
 				String month=new String(StringUtils.hexStringToByte(rec.substring(month_bgn_index,month_bgn_index+4)));
-				String day=rec.substring(day_bgn_index,day_bgn_index+4);
-				if(!CheckDate(month, day))
+				String day=new String(rec.substring(day_bgn_index,day_bgn_index+4));
+				if(!CheckDate(month,day))
 				{
 					String telephone=new String(StringUtils.hexStringToByte(tel));
 					log(telephone+"所对应的机器出现了时间偏离问题");
@@ -199,7 +200,7 @@ public class Sim800AService
 				byte[] msg=StringUtils.hexStringToByte(Message);
 				String _msg=new String(msg);     
 				log("短信内容是："+_msg);
-				DataAnalyseService.TextAnalyse(_msg, tel,date);
+				DataAnalyseService.TextAnalyse(_msg,tel,date);
 				b=true   ;
 			}    
 			else {
@@ -330,7 +331,6 @@ public class Sim800AService
 	//8、读取彩信MMS并存储至本地文件夹，将路径存入数据库
 	public synchronized boolean Read_MMS(String _index)
 	{
-		String index=_index;
 		String ATCMMSEDIT="61742B636D6D73656469743D300D";    //at+cmmsedit=0;
 		SP.write(ATCMMSEDIT, "hex");
 		delay(delay);
@@ -340,7 +340,7 @@ public class Sim800AService
 			return false;
 		}
 		boolean b=false;
-		String ATCMMSRECV="61742B636D6D73726563763D"+index+"0D";       //at+cmmsrecv=index;
+		String ATCMMSRECV="61742B636D6D73726563763D"+_index+"0D";       //at+cmmsrecv=index;
 		SP.write(ATCMMSRECV, "hex");
 		delay(delay);
 		if (SP.getRec_string().equals(ATCMMSRECV)) 
@@ -375,7 +375,10 @@ public class Sim800AService
 						break;
 					}
 				}
-				DataAnalyseService.MSGDataAnalyse(origin_data,index,tel_num,date);
+				int bgn_index=origin_data.indexOf("0D0A",38)+4;  //去除sim800回传的指令信息
+				int end_index=origin_data.length()-12;          //去除末尾的OK字符和冗余的0D0A
+				String img_data=origin_data.substring(bgn_index,end_index);
+				DataAnalyseService.MSGDataAnalyse(img_data,tel_num,date);
 				//if(DeleteMMS(index))
 				//{b=true;}
 				b=true;
