@@ -72,16 +72,17 @@ public class MsgDataDao {
 		}
 		return mdb_lst;
 	}
-	//查询某一个id的记录
-	public MsgDataBean Searchid(String id)
+	//查询某个终端某一天的记录
+	public MsgDataBean Searchid(String terminal_id,String date)
 	{
-		MsgDataBean mdb=new MsgDataBean();
-		String sql="select *from msg_data where id=?";
-		String parameters[]={id};
+		MsgDataBean mdb=null;
+		String sql="select *from msg_data where terminal_id=? and date=?";
+		String parameters[]={terminal_id,date};
 		ResultSet rs=SqlHelper.executeQuery(sql, parameters);
 		try {
-			while(rs.next())
+			if(rs.next())
 			{
+				mdb=new MsgDataBean();
 				mdb.setId(rs.getInt(1));
 				mdb.setTerminal_id(rs.getString(2));
 				mdb.setImg_path(rs.getString(3)); 

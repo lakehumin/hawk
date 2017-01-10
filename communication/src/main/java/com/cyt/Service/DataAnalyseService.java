@@ -23,6 +23,11 @@ public class DataAnalyseService {
 	//private static byte[] buffer=null;
 	private static DualHashBidiMap tel_TidMap=null;
 	private static boolean isinit=false;
+	private static Sim800AService s800=null;
+	private static void s800init(Sim800AService sim800)
+	{
+		s800=sim800;
+	}
 	private static void init(){
 		tel_TidMap=new DualHashBidiMap();
 		TerminalDevDao tdo=new TerminalDevDao();
@@ -229,7 +234,7 @@ public class DataAnalyseService {
 		}
 	}
 	//与前端的通信
-	public static String TCPDataAnalyse(String rec,Sim800AService s800)
+	public static String TCPDataAnalyse(String rec)
 	{
 		checkinit();
 		String Msg="";
@@ -262,8 +267,16 @@ public class DataAnalyseService {
 		System.out.println(_date);
 		System.out.println(path);
 		saveToImgFile(img_data,path);
-		MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),path,_date);
-		new MsgDataDao().add(mdb);
+		MsgDataDao mdd=new MsgDataDao();
+		MsgDataBean temp=mdd.Searchid((String)tel_TidMap.get(telsString), _date);
+		if (temp!=null) {
+			temp.setImg_path(path);
+			mdd.add(temp);
+		}
+		else {
+			MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),path,_date);
+			mdd.add(mdb);
+		}
 		log("图像处理完毕");
 	}
 	//设置英文短信的发送格式
@@ -408,6 +421,7 @@ public class DataAnalyseService {
 		String undeal="0";
 		String underdealing="1";
 		int count=0;
+		TerminalDevDao tdd=new TerminalDevDao();
 		AlarmEventDao aedao=new AlarmEventDao();
 		ArrayList<AlarmEventBean> undeallst=aedao.Search(terminal_id, undeal);
 		ArrayList<AlarmEventBean> underdeallst=aedao.Search(terminal_id, underdealing);
@@ -432,6 +446,12 @@ public class DataAnalyseService {
 			alarm.setEvent(event);
 			alarm.setEventdate(eventdate);
 			aedao.add(alarm);
+			//向负责人发送异常短信
+			TerminalDevBean alarmDev=tdd.Searchid(terminal_id);
+			String managerTel="15905195757";
+			String message="警报通知：检测设备（编号"+terminal_id+"，地址："+alarmDev.getLocation()+"）出现了"+event+"异常，请至服务中心登录查看并及时处理"
+			               +"\r\n"+"————来自服务中心";
+			s800.Send_Message_toManger(managerTel, message);
 		}
 	}
 	//log函数

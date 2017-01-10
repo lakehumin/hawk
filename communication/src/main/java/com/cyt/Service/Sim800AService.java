@@ -93,7 +93,7 @@ public class Sim800AService
 			SP.write(ATCMGS, "hex");
 			delay(delay);
 			if (SP.getRec_string().equals(ATCMGS+"0D0A3E20")) {
-				log("start send");
+				log("start send chinese msg");
 				SP.write(chmsg, "ascll");
 				SP.write("1a", "hex");
 			}
