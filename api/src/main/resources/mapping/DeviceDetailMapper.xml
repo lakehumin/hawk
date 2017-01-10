@@ -5,7 +5,7 @@
     select 
     deviceinfo.terminal_id as id,tel_num as tel,location,islinked as state,battery,voltage,workstate,date
     from deviceinfo left join terminal_dev on deviceinfo.terminal_id = terminal_dev.terminal_id
-    WHERE DATE = (select max(date) - FLOOR(RAND()*7) from deviceinfo)
+    WHERE DATE = (select max(date) from deviceinfo)
   </select>
   <select id="searchDeviceDetailById" resultType="com.lake.api.model.DeviceDetail">
     select 

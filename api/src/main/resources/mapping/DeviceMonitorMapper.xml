@@ -5,7 +5,7 @@
     select 
     *
     from msg_data
-    where terminal_id = #{id} and date = #{date}
+    where terminal_id = #{id} and date = (select max(date) from msg_data)
   </select>
   <select id="searchHistoryById" resultType="com.lake.api.model.DeviceMonitor">
   	select 

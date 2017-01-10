@@ -5,7 +5,7 @@
     select 
     *
     from deviceinfo
-    where terminal_id = #{id} and date = curdate()
+    where terminal_id = #{id} and date = (select max(date) from deviceinfo)
   </select>
   <select id="searchHistoryById" resultType="com.lake.api.model.Deviceinfo">
   	select 
