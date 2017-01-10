@@ -92,7 +92,6 @@ public class TerminalDevDao {
 				tdb.setTel_num(rs.getString(3));
 				tdb.setLocation(rs.getString(4));
 				tdb.setIslinked(rs.getBoolean(5)); 	
-				System.out.println(tdb.getTerminal_id()+"\t"+tdb.getTel_num());
 				tdb_lst.add(tdb);
 			}
 		} catch (SQLException e) {

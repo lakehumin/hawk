@@ -4,8 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import com.cyt.Bean.AlarmEventBean;
 import com.cyt.Bean.DeviceInfoBean;
 import com.cyt.Bean.TerminalDevBean;
+import com.cyt.DAO.AlarmEventDao;
 import com.cyt.DAO.DeviceInfoDao;
 import com.cyt.DAO.TerminalDevDao;
 import com.cyt.Service.DataAnalyseService;
@@ -88,8 +91,7 @@ public class TimerThread extends Thread {
 	{
 		for (int i = 0; i < disconnectdevice.size(); i++) {
 			DataAnalyseService.HandleEvent("Offline", disconnectdevice.get(i));
-		}
-		  
+		}		  
 	}
 	//将离线设备在设备表单中的连接状态设为离线，然后向该设备发送发送心跳指令"02"，若其回复心跳指令，数据库中的离线状态会回复为在线
 	public void ConfirmConnection(ArrayList<String> disconnectdevice)

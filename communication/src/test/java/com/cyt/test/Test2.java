@@ -5,6 +5,7 @@ import java.io.File;
 import javax.imageio.stream.FileImageOutputStream;
 
 import com.cyt.Bean.SerialPortBean;
+import com.cyt.Bean.ServerSocketBean;
 import com.cyt.Service.DataAnalyseService;
 import com.cyt.Service.Sim800AService;
 
@@ -21,6 +22,11 @@ public class Test2
 		//System.out.println(new Date()+" --> "+"helo");
 		SPB.selectPort("COM8");
 		SPB.startRead(0);
+		final Sim800AService s800service=new Sim800AService();
+		s800service.setSP(SPB);
+		DataAnalyseService.s800=s800service;
+		ServerSocketBean ssb=new ServerSocketBean(8002);
+		ssb.start();
 		/*
 		while(true)
 		{
@@ -39,16 +45,7 @@ public class Test2
 		//String phonenum="15861815868"; 
 		
 		String msg="测试已经完成";
-		final Sim800AService s800service=new Sim800AService();
-		s800service.setSP(SPB);
-		String managerTel="15861815868";
-		String message="警报通知：检测设备（编号"+"001"+"，地址："+"南京"+"）出现了"+"低电压"+"异常，请至服务中心登录查看并及时处理"
-		               +"\r\n"+"————来自服务中心";
-//		s800service.Send_Message(managerTel, msg);
-//		String chmsg=DataAnalyseService.Set_CHINESE_MSG(message, managerTel);
-//		System.out.println(chmsg);
-		s800service.Send_Message_toManger(managerTel,message);
-		System.out.println("OK");
+		
 		 //测试接受短信		
 //		
 //		Thread read_thread=new Thread()

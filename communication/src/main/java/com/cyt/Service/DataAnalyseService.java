@@ -6,7 +6,10 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
+
 import com.cyt.Bean.AlarmEventBean;
 import com.cyt.Bean.DeviceInfoBean;
 import com.cyt.Bean.MsgDataBean;
@@ -22,9 +25,10 @@ import com.lake.common_utils.stringutils.StringUtils;
 public class DataAnalyseService {
 	//private static byte[] buffer=null;
 	private static DualHashBidiMap tel_TidMap=null;
+	private static HashMap<String, String> eventMap=null;
 	private static boolean isinit=false;
-	private static Sim800AService s800=null;
-	private static void s800init(Sim800AService sim800)
+	public static Sim800AService s800=null;
+	public static void s800init(Sim800AService sim800)
 	{
 		s800=sim800;
 	}
@@ -35,6 +39,11 @@ public class DataAnalyseService {
 		for (TerminalDevBean tdb : tdblst) {
 			tel_TidMap.put(tdb.getTel_num(), tdb.getTerminal_id());
 		}
+		eventMap=new HashMap<String, String>();
+		eventMap.put("LowPower", "低电量");
+		eventMap.put("Broken", "设备损坏");
+		eventMap.put("VolAbnormal", "电压");
+		eventMap.put("Offline", "通信中断");
 		isinit=true;
 		}
 	private static void checkinit()
@@ -450,8 +459,12 @@ public class DataAnalyseService {
 			//向负责人发送异常短信
 			TerminalDevBean alarmDev=tdd.Searchid(terminal_id);
 			String managerTel="15905195757";
-			String message="警报通知：检测设备（编号"+terminal_id+"，地址："+alarmDev.getLocation()+"）出现了"+event+"异常，请至服务中心登录查看并及时处理"
-			               +"\r\n"+"————来自服务中心";
+			String message="警告：监测设备（编号"+terminal_id+"，地址："+alarmDev.getLocation()+"）发生"+eventMap.get(event)+"异常，请及时处理"
+			               +"\r\n"+"——来自服务中心";
+			if (s800==null) {
+				System.out.println("s800为空");
+				return;
+			}
 			s800.Send_Message_toManger(managerTel, message);
 		}
 	}
