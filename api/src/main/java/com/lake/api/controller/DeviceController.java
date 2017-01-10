@@ -150,6 +150,23 @@ public class DeviceController extends BaseWeb {
         return ;
     }
 	
+	//查询单个设备固有详细信息
+	@RequestMapping("/search/devdetail")
+    public void searchDeviceDevDetail(HttpServletRequest request,HttpServletResponse response) {  
+		String id = request.getParameter("id");
+		Terminaldev dd = terminaldevService.getTerminalInfo(id);
+		
+		BaseResponse br = new BaseResponse();
+		br.setSuccess(true);
+		br.setData(dd);
+		try {
+			print(response, br);
+		} catch (IOException e) {
+			log.error("response获取pw失败");
+		}
+        return ;
+    }
+	
 	//更改设备固定信息，下delete add分别为删除，增加
 	@RequestMapping("/update")
     public void updateDevice(HttpServletRequest request,HttpServletResponse response) {  

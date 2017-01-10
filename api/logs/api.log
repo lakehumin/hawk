@@ -11673,3 +11673,158 @@ Caused by: org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 39; Œƒº˛Ã
 [WARN] [2017-01-10 11:30:33][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
 [WARN] [2017-01-10 11:32:12][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
 [WARN] [2017-01-10 11:32:26][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[INFO] [2017-01-10 11:36:48][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization started
+[INFO] [2017-01-10 11:36:49][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing Root WebApplicationContext: startup date [Tue Jan 10 11:36:48 CST 2017]; root of context hierarchy
+[INFO] [2017-01-10 11:36:49][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+[INFO] [2017-01-10 11:36:49][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+[INFO] [2017-01-10 11:36:49][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[INFO] [2017-01-10 11:36:50][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization completed in 1752 ms
+[INFO] [2017-01-10 11:36:50][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization started
+[INFO] [2017-01-10 11:36:50][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Tue Jan 10 11:36:50 CST 2017]; parent: Root WebApplicationContext
+[INFO] [2017-01-10 11:36:50][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mvc.xml]
+[INFO] [2017-01-10 11:36:50][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/search] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/search.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/search/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/begin] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/begin.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/begin/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/end] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/end.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/end/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/add] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/add.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/add/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/add] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/add.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/add/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/allinfo] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/allinfo.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/allinfo/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devicehistory] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devicehistory.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devicehistory/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/historyimg] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/historyimg.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/historyimg/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/detail] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/detail.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/detail/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/delete] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/delete.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/delete/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/alldetail] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/alldetail.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/alldetail/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/img] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/img.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/img/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/update] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/update.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/update/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/add] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/add.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/add/] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/update] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/update.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/update/] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/delete] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/delete.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/delete/] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/search] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/search.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/search/] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/login] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/login.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/login/] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/getAll] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/getAll.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/getAll/] onto handler 'userManage'
+[INFO] [2017-01-10 11:36:51][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization completed in 831 ms
+[WARN] [2017-01-10 11:38:28][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:38:34][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:42:14][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:42:14][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:42:20][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:42:20][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[INFO] [2017-01-10 11:46:32][org.springframework.web.context.support.XmlWebApplicationContext]Closing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Tue Jan 10 11:36:50 CST 2017]; parent: Root WebApplicationContext
+[INFO] [2017-01-10 11:46:32][org.springframework.web.context.support.XmlWebApplicationContext]Closing Root WebApplicationContext: startup date [Tue Jan 10 11:36:48 CST 2017]; root of context hierarchy
+[INFO] [2017-01-10 11:46:33][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization started
+[INFO] [2017-01-10 11:46:33][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing Root WebApplicationContext: startup date [Tue Jan 10 11:46:33 CST 2017]; root of context hierarchy
+[INFO] [2017-01-10 11:46:34][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+[INFO] [2017-01-10 11:46:34][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+[INFO] [2017-01-10 11:46:34][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[INFO] [2017-01-10 11:46:35][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization completed in 1568 ms
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization started
+[INFO] [2017-01-10 11:46:35][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Tue Jan 10 11:46:35 CST 2017]; parent: Root WebApplicationContext
+[INFO] [2017-01-10 11:46:35][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mvc.xml]
+[INFO] [2017-01-10 11:46:35][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/search] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/search.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/search/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/begin] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/begin.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/begin/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/end] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/end.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/update/end/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/add] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/add.*] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/alarm/add/] onto handler 'alarmController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/add] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/add.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/add/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/allinfo] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/allinfo.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/allinfo/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devicehistory] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devicehistory.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devicehistory/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/historyimg] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/historyimg.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/historyimg/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devdetail] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devdetail.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/devdetail/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/detail] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/detail.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/detail/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/delete] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/delete.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/delete/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/alldetail] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/alldetail.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/alldetail/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/img] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/img.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/search/img/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/update] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/update.*] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/device/update/] onto handler 'deviceController'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/add] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/add.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/add/] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/update] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/update.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/update/] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/delete] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/delete.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/delete/] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/search] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/search.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/search/] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/login] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/login.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/login/] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/getAll] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/getAll.*] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:35][org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping]Mapped URL path [/user/getAll/] onto handler 'userManage'
+[INFO] [2017-01-10 11:46:36][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization completed in 779 ms
+[WARN] [2017-01-10 11:46:39][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:46:44][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:46:47][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:46:59][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:47:37][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:47:52][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:48:14][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
+[WARN] [2017-01-10 11:48:41][com.lake.api.controller.DeviceController]√ª’“µΩ…Ë±∏idŒ™002ΩÒ»’µƒœÍœ∏–≈œ¢
