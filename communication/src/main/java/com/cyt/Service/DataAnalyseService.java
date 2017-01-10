@@ -262,8 +262,8 @@ public class DataAnalyseService {
 		log("图像数据处理。。。");
 		String telsString=new String(StringUtils.hexStringToByte(tel_num));
 		String pathprefix="D:\\UI\\hawkui\\public\\monitorImg\\";
-		//String pathprefix="D:\\SerialPort_MSG\\";
 		String path=pathprefix+tel_TidMap.get(telsString)+"_"+_date+".png";
+		String pathindata="monitorImg\\"+tel_TidMap.get(telsString)+"_"+_date+".png";
 		System.out.println(_date);
 		System.out.println(path);
 		saveToImgFile(img_data,path);
@@ -274,7 +274,7 @@ public class DataAnalyseService {
 			mdd.add(temp);
 		}
 		else {
-			MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),path,_date);
+			MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),pathindata,_date);
 			mdd.add(mdb);
 		}
 		log("图像处理完毕");
@@ -304,19 +304,19 @@ public class DataAnalyseService {
 	//设置中文短信的发送信息格式
 	public static String Set_CHINESE_MSG(String msg,String phoneNum)
 	{
-		checkinit();
 		String length;
 		String telString="";
-		length="0D"; 
 		if(phoneNum.length()>11){
 			     //手机号有前缀+86 ，数字长度为13 
 				 //依据sim800通信指令设置手机号的编码
+			length="0D";
 				for(int i=1;i<phoneNum.length()-1;i=i+2){
 					telString+=String.valueOf(phoneNum.charAt(i+1))+String.valueOf(phoneNum.charAt(i));
 					}
 				telString+="F"+String.valueOf(phoneNum.charAt(phoneNum.length()-1));
 		  }    
 		else {
+			length="0D";
 			for(int i=0;i<phoneNum.length()-1;i=i+2){
 				telString+=String.valueOf(phoneNum.charAt(i+1))+String.valueOf(phoneNum.charAt(i));
 				}
@@ -331,6 +331,7 @@ public class DataAnalyseService {
 		}
 		//生成中文短信发送的编码
 		String chmsg="001100"+length+"91"+telString+"000800"+hexlen+unicodemsg;
+		chmsg=chmsg.toUpperCase();
 		return chmsg;
 	}
 	//unicode编码
@@ -338,11 +339,11 @@ public class DataAnalyseService {
         StringBuffer unicode = new StringBuffer();  
         for (int i = 0; i < string.length(); i++) {
         	String hex=Integer.toHexString(string.charAt(i));
-            if(hex.length()<4)
+            while(hex.length()<4)
             {
-            	hex="00"+hex;
+            	hex="0"+hex;
             }
-            unicode.append(hex+" ");
+            unicode.append(hex);
         }  
         return unicode.toString();
     }

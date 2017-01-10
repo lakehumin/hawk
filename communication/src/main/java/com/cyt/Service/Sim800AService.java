@@ -83,19 +83,21 @@ public class Sim800AService
 		String ATCMGF="41542B434D47463D300D";  //AT+CMGF=0 PDU模式
 		SP.write(ATCMGF, "hex");
 		delay(delay);
-		if (SP.getRec_string().equals("0D0A4F4B0D0A"))                 //设置成功
+		if (SP.getRec_string().equals(ATCMGF+"0D0A4F4B0D0A"))                 //设置成功
 		{
-			String unicodemsg=DataAnalyseService.string2Unicode(Msg);
-			int len=unicodemsg.length()/2-1;
-			String hexlen=Integer.toHexString(len);
 			String chmsg=DataAnalyseService.Set_CHINESE_MSG(Msg, phoneNum);
-			String ATCMGS="61742B636D67733D"+hexlen+"0D";
-			SP.write(ATCMGS, "hex");
+			int len=chmsg.length()/2-1;
+			System.out.println("len="+len+"\t");
+			System.out.println("chmsg="+chmsg);
+			String ATCMGS="at+cmgs="+len+"\r";
+			System.out.println("ATCMGS="+ATCMGS);
+			SP.write(ATCMGS, "ascll");
 			delay(delay);
-			if (SP.getRec_string().equals(ATCMGS+"0D0A3E20")) {
+			if (SP.getRec_string().equals(StringUtils.byte2string(ATCMGS.getBytes())+"0D0A3E20")) {
 				log("start send chinese msg");
 				SP.write(chmsg, "ascll");
-				SP.write("1a", "hex");
+				delay(delay);
+				SP.write("1A", "hex");
 			}
 		}
 		else {

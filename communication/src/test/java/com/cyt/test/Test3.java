@@ -7,6 +7,9 @@ import java.util.Date;
 
 import javax.swing.text.SimpleAttributeSet;
 
+import com.cyt.Service.DataAnalyseService;
+import com.lake.common_utils.stringutils.StringUtils;
+
 public class Test3 {
 	public synchronized void test1()
 	{
@@ -40,9 +43,7 @@ public class Test3 {
 	}
 	public static void main(String []args)
 	{ 
-		Date now=new Date();
-		int hours=now.getHours();
-		System.out.println(hours);
+		
 	}
 	 
 }
