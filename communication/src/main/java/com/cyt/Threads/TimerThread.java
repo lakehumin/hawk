@@ -4,9 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
-
-
 import com.cyt.Bean.DeviceInfoBean;
 import com.cyt.Bean.TerminalDevBean;
 import com.cyt.DAO.DeviceInfoDao;

@@ -56,7 +56,7 @@ public class StringUtils {
   		//读取byte数组
   		public static byte[] readBytes(InputStream in) throws IOException {  
   	        BufferedInputStream bufin = new BufferedInputStream(in);  
-  	        int buffSize = 1024; 
+  	        int buffSize = 8192; 
   	        ByteArrayOutputStream out = new ByteArrayOutputStream(buffSize);  
   	        byte[] temp = new byte[buffSize];  
   	        int size = bufin.read(temp);  

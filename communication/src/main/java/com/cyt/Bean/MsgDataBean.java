@@ -5,9 +5,9 @@ public class MsgDataBean {
 	private int id;
 	private String terminal_id;
 	private String img_path;
-	private Date date;
+	private String date;
 	public MsgDataBean(){}
-	public MsgDataBean(String terminal_id,String img_path,Date date)
+	public MsgDataBean(String terminal_id,String img_path,String date)
 	{
 		this.terminal_id=terminal_id;
 		this.img_path=img_path;
@@ -37,11 +37,11 @@ public class MsgDataBean {
 		this.img_path = img_path;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

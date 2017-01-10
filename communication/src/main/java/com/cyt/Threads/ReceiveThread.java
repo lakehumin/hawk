@@ -45,12 +45,13 @@ public class ReceiveThread extends Thread {
 					}
 					rec += buf2;
 					int length = rec.length();
+					String CHC=rec.substring(length-4,length);
+					//System.out.println("CHC="+CHC);
 					//String CHC = rec.substring(length - 4, length);
-					String terminal_id=rec.substring(0,3);
-					String msg=rec.substring(3,length);
-					System.out.println("接收到来自 "+terminal_id+"的消息："+"\t" + msg);
-					if (!"".equals(rec)) {
+					if (CHC.equals("FFD9")) {
 						DataAnalyseService.GPRSDataAnalyse(rec);
+						//System.out.println("截取成功");
+						//System.out.println("rec="+rec);
 						rec="";	
 					}
 					

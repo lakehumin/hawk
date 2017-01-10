@@ -210,12 +210,23 @@ public class DataAnalyseService {
 	public static void GPRSDataAnalyse(String rec)
 	{
 		checkinit();
-		String terminal_id=rec.substring(0,3);
-		String date=rec.substring(3,11);
-		String msg=rec.substring(11);
+		String type=rec.substring(0,2);
+		String terminal_id=rec.substring(2,5);
+		String date=rec.substring(5,13);
+		String msg=rec.substring(13);
 		String telhex=StringUtils.str2hexstr((String)tel_TidMap.getKey(terminal_id));
-		System.out.println(terminal_id+"\t"+date+"\t"+msg+"\t"+tel_TidMap.getKey(terminal_id)+"\t");
-		TextAnalyse(msg, telhex, date);
+		//System.out.println(type+"\t"+terminal_id+"\t"+date+"\t"+msg+"\t"+tel_TidMap.getKey(terminal_id)+"\t");
+		if ("01".equals(type)) {
+			msg=msg.substring(0,msg.length()-4);
+			TextAnalyse(msg, telhex, date);
+		}
+		else if ("02".equals(type)) {
+			log("处理图像"+terminal_id+"\t"+date);
+			MSGDataAnalyse(msg, telhex, date);
+		}
+		else {
+			logerr("接收到编号为"+terminal_id+"的错误数据。。。");
+		}
 	}
 	//与前端的通信
 	public static String TCPDataAnalyse(String rec,Sim800AService s800)
@@ -240,21 +251,20 @@ public class DataAnalyseService {
 		return Msg;
 	}
 	//处理MMS裸数据并保存到本地
-	public static void MSGDataAnalyse(String origin_data,String index,String tel_num,String _date)
+	public static void MSGDataAnalyse(String img_data,String tel_num,String _date)
 	{
 		checkinit();
-		log("MMS数据处理。。。");
-		int bgn_index=origin_data.indexOf("0D0A", 38)+4;
-		int end_index=origin_data.length()-12;
-		String new_data=origin_data.substring(bgn_index,end_index);
-		String dateString=new String(StringUtils.hexStringToByte(_date));
+		log("图像数据处理。。。");
 		String telsString=new String(StringUtils.hexStringToByte(tel_num));
-		String path="D:\\SerialPort_MSG\\"+tel_TidMap.get(telsString)+"_"+dateString+".png";
-		saveToImgFile(new_data, path);
-		Date date=getDate(dateString);
-		MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),path,date);
+		String pathprefix="D:\\UI\\hawkui\\public\\monitorImg\\";
+		//String pathprefix="D:\\SerialPort_MSG\\";
+		String path=pathprefix+tel_TidMap.get(telsString)+"_"+_date+".png";
+		System.out.println(_date);
+		System.out.println(path);
+		saveToImgFile(img_data,path);
+		MsgDataBean mdb=new MsgDataBean((String)tel_TidMap.get(telsString),path,_date);
 		new MsgDataDao().add(mdb);
-		log("MMS处理完毕");
+		log("图像处理完毕");
 	}
 	//设置英文短信的发送格式
 	public static String Set_English_MSG(String cmd,String content)

@@ -60,7 +60,7 @@ public class MsgDataDao {
 				mdb.setId(rs.getInt(1));
 				mdb.setTerminal_id(rs.getString(2));
 				mdb.setImg_path(rs.getString(3)); 
-				mdb.setDate(rs.getDate(4));
+				mdb.setDate(rs.getString(4));
 				mdb_lst.add(mdb);
 			}
 		} catch (SQLException e) {
@@ -85,7 +85,7 @@ public class MsgDataDao {
 				mdb.setId(rs.getInt(1));
 				mdb.setTerminal_id(rs.getString(2));
 				mdb.setImg_path(rs.getString(3)); 
-				mdb.setDate(rs.getDate(4));
+				mdb.setDate(rs.getString(4));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
