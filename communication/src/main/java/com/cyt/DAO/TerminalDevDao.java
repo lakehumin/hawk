@@ -52,9 +52,9 @@ public class TerminalDevDao {
 	public ArrayList<TerminalDevBean> Search(int key,String content)
 	{
 		ArrayList<TerminalDevBean> tdb_lst=new ArrayList<TerminalDevBean>();
-		String sql="select *from terminal_dev where "+hmp.get(key)+"="+content;
-		//String parameters[]={content};
-		ResultSet rs=SqlHelper.executeQuery(sql, null);
+		String sql="select *from terminal_dev where "+hmp.get(key)+" =?";
+		String parameters[]={content};
+		ResultSet rs=SqlHelper.executeQuery(sql, parameters);
 		try {
 			while(rs.next())
 			{
@@ -82,7 +82,6 @@ public class TerminalDevDao {
 		String sql="select *from terminal_dev";
 		//String parameters[]={content};
 		ResultSet rs=SqlHelper.executeQuery(sql, null);
-		System.out.println("start search");
 		try {
 			while(rs.next())
 			{
@@ -92,7 +91,6 @@ public class TerminalDevDao {
 				tdb.setTel_num(rs.getString(3));
 				tdb.setLocation(rs.getString(4));
 				tdb.setIslinked(rs.getBoolean(5)); 	
-				System.out.println(tdb.getTerminal_id()+"\t"+tdb.getTel_num());
 				tdb_lst.add(tdb);
 			}
 		} catch (SQLException e) {

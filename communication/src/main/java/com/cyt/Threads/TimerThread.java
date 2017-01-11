@@ -34,6 +34,7 @@ public class TimerThread extends Thread {
 		for (int i = 0; i < tdblst.size(); i++) {
 			terminal_idMap.put(i, tdblst.get(i).getTerminal_id());
 			terid_telMap.put(tdblst.get(i).getTerminal_id(), tdblst.get(i).getTel_num());
+			//System.out.println(tdblst.get(i).getTerminal_id()+"\t"+tdblst.get(i).getTel_num());
 		}
 	}
 	//将设备的逻辑连接状态设为离线，true为在线，false为离线
@@ -52,10 +53,11 @@ public class TimerThread extends Thread {
 		todaydate=format.format(new Date());
 		DeviceInfoDao did=new DeviceInfoDao();
 		ArrayList<String> disconnectdevice=new ArrayList<String>();
-		ArrayList<DeviceInfoBean> todaylst=did.Search(6,"today");
+		ArrayList<DeviceInfoBean> todaylst=did.Search(6,todaydate);
 		Update();
 		ResetConnection();
 		for (int i = 0; i < todaylst.size(); i++) {
+			//System.out.println(todaylst.get(i).getTerminal_id()+"已经上报");
 			ConnectioinMap.put(todaylst.get(i).getTerminal_id(),true);			
 		}
 		for (int i = 0; i < ConnectioinMap.size(); i++) {
@@ -88,8 +90,7 @@ public class TimerThread extends Thread {
 	{
 		for (int i = 0; i < disconnectdevice.size(); i++) {
 			DataAnalyseService.HandleEvent("Offline", disconnectdevice.get(i));
-		}
-		  
+		}		  
 	}
 	//将离线设备在设备表单中的连接状态设为离线，然后向该设备发送发送心跳指令"02"，若其回复心跳指令，数据库中的离线状态会回复为在线
 	public void ConfirmConnection(ArrayList<String> disconnectdevice)
@@ -120,11 +121,13 @@ public class TimerThread extends Thread {
 			int hour=now.getHours();
 			if (hour==timeToTestConnection) {
 				ConfirmConnection(SearchDisConnectionFromInfo());
-				Delay(5*60);
+				Delay(1*60);
 				SetOfflineEvent(SearchDisConnectionFromDevice());
+				break;
 			}
 			//每隔35分钟检查一下时间是否为设定时间，若到了，则进行通讯连接状态的检查
-			Delay(35*60);    
+			Delay(1*60);    
 		}
+		System.out.println("测试通信完毕！");
 	}
 }

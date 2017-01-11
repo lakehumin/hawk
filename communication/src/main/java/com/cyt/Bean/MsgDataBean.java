@@ -1,6 +1,4 @@
 package com.cyt.Bean;
-import java.sql.Date;
-
 public class MsgDataBean {
 	private int id;
 	private String terminal_id;

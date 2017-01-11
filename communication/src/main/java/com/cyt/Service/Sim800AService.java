@@ -59,6 +59,7 @@ public class Sim800AService
 	public synchronized boolean  Send_Message(String phoneNum,String msg)
 	{
 		boolean b=false;
+		SetSIM_Text_Work_Environment();
 		String ATCMGS="41542B434D47533D";
 		byte[] num=phoneNum.getBytes();
 		String numstrString=StringUtils.byte2string(num);
@@ -71,37 +72,70 @@ public class Sim800AService
 			byte[] _msg=msg.getBytes();
 			String msg_0x=StringUtils.byte2string(_msg)+"1A0D";
 			SP.write(msg_0x, "hex");
-			b=true; 
+			delay(delay); 
+			int count=0;
+			while (true)
+			{
+				
+				delay(delay);
+				if (SP.getRec_string().endsWith("0D0A4F4B0D0A")) {
+					break;
+				}
+				if (count>10) {
+					//超时强退
+					break;
+				}
+				count++;
+			}
+			b=true;
 			//SP.write("48454C4C4F20434A53211A0D", "hex");
 		}
 		
 		return b;
 	}
 	//3.1、 发送中文短信（与管理人员进行通信）
-	public synchronized   boolean  Send_Message_toManger(String phoneNum,String Msg)
+	public synchronized  boolean  Send_Message_toManger(String phoneNum,String Msg)
 	{
+		boolean b=false;
 		String ATCMGF="41542B434D47463D300D";  //AT+CMGF=0 PDU模式
 		SP.write(ATCMGF, "hex");
 		delay(delay);
-		if (SP.getRec_string().equals("0D0A4F4B0D0A"))                 //设置成功
+		if (SP.getRec_string().equals(ATCMGF+"0D0A4F4B0D0A"))                 //设置成功
 		{
-			String unicodemsg=DataAnalyseService.string2Unicode(Msg);
-			int len=unicodemsg.length()/2-1;
-			String hexlen=Integer.toHexString(len);
 			String chmsg=DataAnalyseService.Set_CHINESE_MSG(Msg, phoneNum);
-			String ATCMGS="61742B636D67733D"+hexlen+"0D";
-			SP.write(ATCMGS, "hex");
+			int len=chmsg.length()/2-1;
+			System.out.println("len="+len+"\t");
+			System.out.println("chmsg="+chmsg);
+			String ATCMGS="at+cmgs="+len+"\r";
+			System.out.println("ATCMGS="+ATCMGS);
+			SP.write(ATCMGS, "ascll");
 			delay(delay);
-			if (SP.getRec_string().equals(ATCMGS+"0D0A3E20")) {
-				log("start send");
+			if (SP.getRec_string().equals(StringUtils.byte2string(ATCMGS.getBytes())+"0D0A3E20")) {
+				log("start send chinese msg");
 				SP.write(chmsg, "ascll");
-				SP.write("1a", "hex");
+				delay(delay);
+				SP.write("1A", "hex");
+				int count=0;
+				while (true)
+				{
+					
+					delay(delay);
+					if (SP.getRec_string().endsWith("0D0A4F4B0D0A")) {
+						break;
+					}
+					if (count>10) {
+						//超时强退
+						break;
+					}
+					count++;
+				}
+				b=true;
 			}
 		}
 		else {
 			log("请重启设备。。。");
 		}
-		return true;
+		return b;
 	}
 	//4、获取接收到的短消息,同时读取。
 	public  void Wait_For_Message()
@@ -171,17 +205,17 @@ public class Sim800AService
 			String ATCMGR="41542B434D47523D"+index+"0D";//读取命令
 			SP.write(ATCMGR, "hex");
 			delay(delay);
-			if(SP.getRec_string().startsWith(ATCMGR+"0D0A2B434D47523A"))
+			if(SP.getRec_string().startsWith(ATCMGR+"0D0A2B434D47523A")||SP.getRec_string().startsWith("0D0A2B434D47523A"))
 			{ 
 				String rec=SP.getRec_string();
 				int tel_bgnindex=rec.indexOf("2C",30)+4;
 				int tel_endindex=rec.indexOf("2C", tel_bgnindex)-2;
 				String tel=rec.substring(tel_bgnindex,tel_endindex);
 				int month_bgn_index=rec.indexOf("2F")+2;
-				int day_bgn_index=rec.indexOf("2C",month_bgn_index)-6;
+				int day_bgn_index=rec.indexOf("2C",month_bgn_index)-4;
 				String date=new String(rec.substring((month_bgn_index)-6,day_bgn_index+4));
 				String month=new String(StringUtils.hexStringToByte(rec.substring(month_bgn_index,month_bgn_index+4)));
-				String day=new String(rec.substring(day_bgn_index,day_bgn_index+4));
+				String day=new String(StringUtils.hexStringToByte(rec.substring(day_bgn_index,day_bgn_index+4)));
 				if(!CheckDate(month,day))
 				{
 					String telephone=new String(StringUtils.hexStringToByte(tel));
@@ -201,6 +235,7 @@ public class Sim800AService
 				String _msg=new String(msg);     
 				log("短信内容是："+_msg);
 				DataAnalyseService.TextAnalyse(_msg,tel,date);
+				DeleteMSG(index);
 				b=true   ;
 			}    
 			else {
@@ -379,16 +414,15 @@ public class Sim800AService
 				int end_index=origin_data.length()-12;          //去除末尾的OK字符和冗余的0D0A
 				String img_data=origin_data.substring(bgn_index,end_index);
 				DataAnalyseService.MSGDataAnalyse(img_data,tel_num,date);
-				//if(DeleteMMS(index))
-				//{b=true;}
+				DeleteMSG(_index);
 				b=true;
 			}
 		}
 		
 		return b;
 	}
-	//9、删除对应彩信
-	public boolean DeleteMMS(String index)
+	//9、删除对应信息
+	public  synchronized boolean DeleteMSG(String index)
 	{
 		String ATCMGD="41542B434D47443D"+index+"0D"; 
 		SP.write(ATCMGD, "hex");
