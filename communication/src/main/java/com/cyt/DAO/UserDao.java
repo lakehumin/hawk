@@ -2,8 +2,6 @@ package com.cyt.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.cyt.Bean.DeviceInfoBean;
 import com.cyt.Bean.UserBean;
 import com.lake.common_utils.db_utils.SqlHelper;
 

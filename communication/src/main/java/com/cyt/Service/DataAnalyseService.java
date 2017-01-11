@@ -141,7 +141,11 @@ public class DataAnalyseService {
 		checkinit();
 		DeviceInfoDao did=new DeviceInfoDao();
 		TerminalDevDao tdd=new TerminalDevDao();
-		String telnum="'"+new String(StringUtils.hexStringToByte(tel))+"'";
+		String telnum=new String(StringUtils.hexStringToByte(tel));
+		if(telnum.length()==14)
+		{
+			telnum=telnum.substring(3);
+		}
 		log("telnum="+telnum);
 		ArrayList<TerminalDevBean> temp=tdd.Search(3,telnum);
 		if (msg.startsWith("01"))
@@ -270,6 +274,9 @@ public class DataAnalyseService {
 		checkinit();
 		log("图像数据处理。。。");
 		String telsString=new String(StringUtils.hexStringToByte(tel_num));
+		if (telsString.length()==14) {
+			telsString=telsString.substring(3);
+		}
 		String pathprefix="D:\\UI\\hawkui\\public\\monitorImg\\";
 		String path=pathprefix+tel_TidMap.get(telsString)+"_"+_date+".png";
 		String pathindata="monitorImg\\"+tel_TidMap.get(telsString)+"_"+_date+".png";

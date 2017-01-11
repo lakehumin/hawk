@@ -37,7 +37,7 @@ public class ReceiveThread extends Thread {
 				if (client!=null) {
 					byte[] data = StringUtils.readBytes(client.getInputStream());
 					String buf2=new String(data);
-					String buf=StringUtils.byte2string(data);
+					//String buf=StringUtils.byte2string(data);
 					if ("".equals(buf2)||null==buf2)
 					{
 						rec="";

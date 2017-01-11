@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.TooManyListenersException;
+
 import gnu.io.*;
 
 public class SerialPortBean implements Runnable, SerialPortEventListener {

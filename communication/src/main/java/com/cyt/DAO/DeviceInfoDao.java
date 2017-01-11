@@ -53,9 +53,9 @@ public class DeviceInfoDao {
 	public ArrayList<DeviceInfoBean> Search(int key,String content)
 	{
 		ArrayList<DeviceInfoBean> dib_lst=new ArrayList<DeviceInfoBean>();
-		String sql="select *from deviceinfo where "+hmp.get(key)+"="+content;
-		//String parameters[]={content};
-		ResultSet rs=SqlHelper.executeQuery(sql, null);
+		String sql="select *from deviceinfo where "+hmp.get(key)+" =?";
+		String parameters[]={content};
+		ResultSet rs=SqlHelper.executeQuery(sql, parameters);
 		try {
 			while(rs.next())
 			{

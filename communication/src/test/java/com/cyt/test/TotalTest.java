@@ -8,15 +8,10 @@ import com.cyt.Bean.SerialPortBean;
 import com.cyt.Bean.ServerSocketBean;
 import com.cyt.Service.DataAnalyseService;
 import com.cyt.Service.Sim800AService;
-
-import java.io.*;
-import java.util.Date;
-
-public class Test2
+import com.cyt.Threads.TimerThread;
+public class TotalTest
 {
-	 public static void main(String args[]) { 
-	        
-	    
+	 public static void main(String args[]) {   
 		SerialPortBean SPB=new SerialPortBean();
 		//SPB.listPort();
 		//System.out.println(new Date()+" --> "+"helo");
@@ -25,8 +20,17 @@ public class Test2
 		final Sim800AService s800service=new Sim800AService();
 		s800service.setSP(SPB);
 		DataAnalyseService.s800=s800service;
-		ServerSocketBean ssb=new ServerSocketBean(8002);
-		ssb.start();
+//		ServerSocketBean ssb=new ServerSocketBean(8002);
+//		ssb.start();
+		TimerThread timer=new TimerThread(s800service, 22);
+		timer.start();
+		Thread read_thread=new Thread()
+		{
+			public void run() {
+				s800service.Wait_For_Message();
+			}
+		};
+		read_thread.start();
 		/*
 		while(true)
 		{
@@ -44,17 +48,9 @@ public class Test2
 		*/
 		//String phonenum="15861815868"; 
 		
-		String msg="测试已经完成";
-		
 		 //测试接受短信		
 //		
-//		Thread read_thread=new Thread()
-//		{
-//			public void run() {
-//				s800service.Wait_For_Message();
-//			}
-//		};
-//		read_thread.start();
+		
 		//s800service.Read_MMS("3037");
 		//开启读取线程
 		/*
